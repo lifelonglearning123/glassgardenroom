@@ -2,6 +2,14 @@
 // GLASS GARDEN ROOMS — main.js
 // ==========================================================================
 
+// ---- GoHighLevel webhook ---------------------------------------------------
+// Paste the inbound webhook URL from your GHL sub-account workflow here.
+// Workflow → Add Trigger → "Inbound Webhook" → copy the URL.
+// While this is empty, the form falls back to a "we'll be in touch" message
+// without sending anywhere.
+const GHL_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/K0VS3ggGZfq9zHkJIL9i/webhook-trigger/ae25295e-8684-436b-b9f0-be92f6782534';
+// ---------------------------------------------------------------------------
+
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Mobile menu ---------- */
@@ -105,6 +113,62 @@ document.addEventListener('DOMContentLoaded', () => {
     track.innerHTML += track.innerHTML;
     track.dataset.duplicated = '1';
   });
+
+  /* ---------- Quote form → GoHighLevel webhook ---------- */
+  const quoteForm = document.getElementById('quote-form');
+  if (quoteForm) {
+    const statusEl = document.getElementById('quote-status');
+    const submitBtn = quoteForm.querySelector('button[type="submit"]');
+    const originalBtnHTML = submitBtn ? submitBtn.innerHTML : '';
+
+    const showStatus = (msg, isError = false) => {
+      if (!statusEl) return;
+      statusEl.textContent = msg;
+      statusEl.classList.toggle('is-error', isError);
+      statusEl.hidden = false;
+    };
+
+    quoteForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!quoteForm.reportValidity()) return;
+
+      const fd = new FormData(quoteForm);
+      const payload = {
+        name:     fd.get('name'),
+        phone:    fd.get('phone'),
+        email:    fd.get('email'),
+        product:  fd.get('product'),
+        postcode: fd.get('postcode'),
+        budget:   fd.get('budget'),
+        message:  fd.get('message'),
+        source:   'glassgardenrooms.net — quote form',
+        page:     window.location.pathname,
+        submitted_at: new Date().toISOString()
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      try {
+        if (GHL_WEBHOOK_URL) {
+          const res = await fetch(GHL_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+        }
+        // Success (or no webhook configured yet)
+        quoteForm.reset();
+        submitBtn.innerHTML = "Sent — we'll be in touch";
+        showStatus("Thank you — your enquiry is with us. We'll reply within 2 working days.");
+      } catch (err) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHTML;
+        showStatus("Something went wrong sending the form. Please call 024 7510 2899 or email info@glassgardenrooms.net.", true);
+      }
+    });
+  }
 
   /* ---------- Mark current nav ---------- */
   const path = window.location.pathname.split('/').pop() || 'index.html';
