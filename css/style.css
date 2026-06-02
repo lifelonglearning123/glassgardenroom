@@ -1874,3 +1874,291 @@ p { max-width: 65ch; }
   .cinema-media video, .cinema-media img,
   .reveal, .hero h1 .word, .hero-image img { animation: none !important; transition: none; opacity: 1; transform: none; }
 }
+
+/* ==========================================================================
+   QUOTE WIZARD — sliding off-canvas drawer
+   ========================================================================== */
+.qw {
+  position: fixed; inset: 0;
+  z-index: 200;
+  display: flex; justify-content: flex-end;
+  pointer-events: none;
+}
+.qw[aria-hidden="false"] { pointer-events: auto; }
+.qw-overlay {
+  position: absolute; inset: 0;
+  background: rgba(24, 22, 18, 0.55);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.qw[aria-hidden="false"] .qw-overlay { opacity: 1; }
+
+.qw-panel {
+  position: relative;
+  width: min(720px, 100%);
+  height: 100dvh;
+  background: var(--bone-soft);
+  box-shadow: -32px 0 80px -20px rgba(24, 22, 18, 0.25);
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.5s var(--ease);
+  display: flex; flex-direction: column;
+}
+.qw[aria-hidden="false"] .qw-panel { transform: translateX(0); }
+
+.qw-close {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 38px; height: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  color: var(--ink);
+  background: var(--bone);
+  border: 1px solid var(--line);
+  transition: background 0.2s var(--ease);
+  z-index: 2;
+}
+.qw-close:hover { background: var(--bone-deep); }
+
+/* ---------- Header ---------- */
+.qw-head {
+  padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem) clamp(1rem, 2vw, 1.5rem);
+  border-bottom: 1px solid var(--line-soft);
+}
+.qw-eyebrow {
+  display: inline-block;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--ink-mute);
+  margin-bottom: 0.75rem;
+}
+.qw-title {
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 1.25rem;
+  text-wrap: balance;
+}
+.qw-title em.italic-display {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--moss);
+}
+
+/* ---------- Progress stepper ---------- */
+.qw-steps {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+.qw-steps li {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--ink-mute);
+  padding-top: 0.6rem;
+  border-top: 2px solid var(--line);
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+  display: flex; flex-direction: column; gap: 0.15rem;
+}
+.qw-steps li span {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--moss);
+}
+.qw-steps li.is-current { color: var(--ink); border-top-color: var(--moss); }
+.qw-steps li.is-done { color: var(--ink-soft); border-top-color: var(--moss-soft); }
+
+/* ---------- Steps ---------- */
+.qw-form { display: contents; }
+.qw-step {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+}
+.qw-step.is-active { display: flex; }
+.qw-step-body {
+  padding: clamp(1.25rem, 3vw, 2rem) clamp(1.5rem, 4vw, 3rem);
+  flex: 1;
+}
+.qw-lede {
+  font-size: var(--fs-lg);
+  line-height: 1.5;
+  color: var(--ink);
+  text-wrap: pretty;
+  margin: 0 0 1rem;
+}
+.qw-text {
+  color: var(--ink-soft);
+  margin: 0 0 1.5rem;
+}
+.qw-meta {
+  list-style: none; margin: 0; padding: 1.25rem 0 0;
+  display: flex; flex-direction: column; gap: 0.5rem;
+  border-top: 1px solid var(--line-soft);
+}
+.qw-meta li {
+  display: flex; gap: 1rem; align-items: baseline;
+  font-size: var(--fs-sm);
+}
+.qw-meta-k {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--ink-mute);
+  width: 6rem;
+  flex-shrink: 0;
+}
+.qw-meta li a { color: var(--ink); border-bottom: 1px solid var(--line); }
+.qw-meta li a:hover { color: var(--moss); border-bottom-color: var(--moss); }
+
+/* ---------- Fields ---------- */
+.qw-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem 1.25rem;
+}
+.qw-field-full { grid-column: 1 / -1; }
+.qw-field { display: flex; flex-direction: column; gap: 0.35rem; }
+.qw-field label,
+.qw-radioset legend {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.qw-field label small {
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-mute);
+  margin-left: 0.25rem;
+}
+.qw-field abbr {
+  color: var(--brass);
+  text-decoration: none;
+  margin-left: 0.15rem;
+}
+.qw-field input[type="text"],
+.qw-field input[type="email"],
+.qw-field input[type="tel"],
+.qw-field input[type="date"],
+.qw-field select,
+.qw-field textarea {
+  font-family: var(--sans);
+  font-size: var(--fs-base);
+  padding: 0.75rem 0.9rem;
+  background: var(--bone);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  outline: none;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.qw-field textarea { resize: vertical; min-height: 100px; }
+.qw-field input:focus,
+.qw-field select:focus,
+.qw-field textarea:focus {
+  border-color: var(--moss);
+  background: #fff;
+}
+.qw-field input:invalid:not(:placeholder-shown),
+.qw-field select.is-invalid,
+.qw-field input.is-invalid {
+  border-color: #b14a3a;
+}
+
+/* radios */
+.qw-radioset {
+  border: none; padding: 0;
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.qw-radioset legend { margin-bottom: 0.5rem; }
+.qw-radio, .qw-check {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  font-size: var(--fs-sm);
+  color: var(--ink);
+  cursor: pointer;
+  line-height: 1.45;
+}
+.qw-radio input, .qw-check input {
+  margin-top: 0.2rem;
+  accent-color: var(--moss);
+}
+
+/* ---------- Footer / actions ---------- */
+.qw-foot {
+  padding: clamp(1rem, 2vw, 1.5rem) clamp(1.5rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2rem);
+  border-top: 1px solid var(--line-soft);
+  background: var(--bone-soft);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: sticky; bottom: 0;
+}
+.qw-foot .btn { flex: 1; justify-content: center; min-width: 140px; }
+.qw-foot .btn-ghost { flex: 0 0 auto; }
+
+/* ---------- Status / error line ---------- */
+.qw-status {
+  margin: 0 clamp(1.5rem, 4vw, 3rem);
+  padding: 0.75rem 1rem;
+  background: var(--bone);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  font-size: var(--fs-sm);
+  color: var(--ink);
+}
+.qw-status.is-error {
+  background: #fbecea;
+  border-color: #b14a3a;
+  color: #6a2418;
+}
+
+/* ---------- Success ---------- */
+.qw-success {
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 1rem;
+}
+.qw-success-mark { color: var(--moss); }
+.qw-success-h {
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.qw-success-p {
+  color: var(--ink-soft);
+  font-size: var(--fs-lg);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* Body lock when wizard open */
+body.qw-open { overflow: hidden; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .qw-panel { transition: none; }
+  .qw-overlay { transition: none; }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .qw-grid { grid-template-columns: 1fr; }
+  .qw-meta-k { width: 5rem; }
+  .qw-steps li { font-size: 0.65rem; letter-spacing: 0.08em; }
+  .qw-foot .btn-ghost { flex: 1; }
+}

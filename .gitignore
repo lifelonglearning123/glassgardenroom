@@ -1,0 +1,22 @@
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# OS
+.DS_Store
+Thumbs.db
+_thumbs/
+
+# Recon / scratch
+recon/
+
+# Editor
+.vscode/
+.idea/
+*.swp
