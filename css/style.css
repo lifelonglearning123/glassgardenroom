@@ -354,7 +354,7 @@ p { max-width: 65ch; }
 }
 .hero-image {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
   background: var(--bone-deep);
 }
@@ -467,7 +467,7 @@ p { max-width: 65ch; }
   cursor: pointer;
 }
 .card-media {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--bone-deep);
   position: relative;
@@ -545,7 +545,7 @@ p { max-width: 65ch; }
 .editorial-flip { direction: rtl; }
 .editorial-flip > * { direction: ltr; }
 .editorial-image {
-  aspect-ratio: 5 / 6;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--bone-deep);
 }
@@ -1473,21 +1473,22 @@ p { max-width: 65ch; }
 /* ---------- Lifestyle stack (image-stack hero) ---------- */
 .stack {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.4fr 1fr;
   gap: clamp(1rem, 2vw, 1.5rem);
-  align-items: stretch;
+  align-items: start;
 }
 .stack-major {
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--bone-deep);
 }
 .stack-minors {
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: auto auto;
   gap: clamp(1rem, 2vw, 1.5rem);
 }
 .stack-minor {
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--bone-deep);
 }
@@ -1500,9 +1501,9 @@ p { max-width: 65ch; }
 .stack figure:hover img { transform: scale(1.05); }
 @media (max-width: 720px) {
   .stack { grid-template-columns: 1fr; }
-  .stack-major { aspect-ratio: 4 / 5; }
+  .stack-major { aspect-ratio: 4 / 3; }
   .stack-minors { grid-template-rows: auto auto; grid-template-columns: 1fr 1fr; }
-  .stack-minor { aspect-ratio: 4 / 5; }
+  .stack-minor { aspect-ratio: 4 / 3; }
 }
 
 /* ---------- Pull-quote / pull text ---------- */
@@ -1542,7 +1543,7 @@ p { max-width: 65ch; }
 }
 .showcase-media {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--bone-deep);
 }
@@ -1703,7 +1704,7 @@ p { max-width: 65ch; }
 .journal-media {
   display: block;
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--bone-deep);
 }
