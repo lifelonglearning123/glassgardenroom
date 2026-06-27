@@ -1,0 +1,124 @@
+---
+import Base from '~/layouts/Base.astro';
+import { fetchOne } from '~/lib/sanity';
+import { siteSettingsQuery, faqQuery } from '~/lib/queries';
+import { renderInline, renderRichText } from '~/lib/portableText';
+import type { SiteSettings } from '~/types';
+
+const [settings, page] = await Promise.all([
+  fetchOne<SiteSettings>(siteSettingsQuery),
+  fetchOne<any>(faqQuery),
+]);
+
+const intro = page?.intro;
+const breadcrumb = intro?.breadcrumb ?? '— Journal & FAQ';
+const volume     = intro?.volumeLabel ?? 'Vol. 01';
+const lastUpdated = intro?.lastUpdated
+  ? new Date(intro.lastUpdated).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+  : 'April 2026';
+const headline   = intro?.headline ? renderInline(intro.headline) : 'Common <em>questions,</em> straight answers.';
+const lede       = intro?.lede ?? "Everything we're most often asked — about quoting, installation, materials and finance. If something isn't here, send us a WhatsApp on 07398 224061 and we'll come back the same day.";
+
+const sections = page?.sections?.length ? page.sections : [
+  {
+    number: '№ 01',
+    title: 'Quotes & payment',
+    meta: 'Reply within 2 working days',
+    items: [
+      { question: 'How long does it take to get a quote, and what should I send you?', answerHtml: "We aim to reply to all enquiries within 2 working days — most are answered the same day. To make our quote as accurate as possible, please send us the width and projection you'd like, your roof preference (glass or polycarbonate), wall-mounted or freestanding, side walls or sliding doors, and photos of the area." },
+      { question: 'How can I contact you?', answerHtml: 'Email info@glassgardenrooms.net, call our office on 024 7510 2899, or WhatsApp 07398 224061.' },
+      { question: 'How can I pay?', answerHtml: "We accept bank transfers, cheques, cash, and credit/debit card payments. We don't accept American Express. Finance is also available — see our finance page." },
+      { question: 'What deposit do I need to pay?', answerHtml: 'Typically 25–50%, depending on the complexity of your project.' },
+    ],
+  },
+  {
+    number: '№ 02',
+    title: 'Installation',
+    meta: 'Lead time 4–6 weeks',
+    items: [
+      { question: 'Do you offer installation?', answerHtml: 'Yes. Our installation teams are experienced installers with extensive industry experience. All are approved and vetted installation partners of Glass Garden Rooms Ltd.' },
+      { question: 'How long does installation take?', answerHtml: "A veranda typically takes 1–2 days. A glass garden room takes 3–6 days. We'll never rush — it takes as long as it needs to be done correctly." },
+      { question: 'Do I need planning permission?', answerHtml: "Generally, planning permission isn't required. We always recommend checking your local regulations — and we'll guide you through it on your survey." },
+    ],
+  },
+  {
+    number: '№ 03',
+    title: 'Features & options',
+    meta: 'Materials · Finishes',
+    items: [
+      { question: 'What are your verandas and glass garden rooms made from?', answerHtml: 'High-quality 6063-T6 aluminium — for strength, durability, and a long-lasting premium look. Coated with AkzoNobel powder paint to keep its finish for decades.' },
+      { question: 'What colours do you offer?', answerHtml: 'Black, Dark Grey, Traffic White and Cream as standard. Custom RAL colours are available on request.' },
+    ],
+  },
+];
+
+// Render answer HTML from rich-text if Sanity, otherwise use the seeded answerHtml string.
+const renderAnswer = (item: any): string => {
+  if (item.answerHtml) return item.answerHtml;
+  if (item.answer) return renderRichText(item.answer);
+  return '';
+};
+
+const pageTitle = page?.seo?.title ?? 'Journal & FAQ | Glass Garden Rooms';
+const pageDesc  = page?.seo?.description ?? "Quotes, installation, materials and finance — answers to the questions we're most often asked about our verandas, glass garden rooms and carports.";
+
+const sectionId = (n: string, idx: number) => `section-${idx + 1}`;
+---
+<Base title={pageTitle} description={pageDesc} seo={page?.seo} settings={settings}>
+
+<section class="page-head wrap">
+  <div class="page-head-row">
+    <span class="breadcrumb">{breadcrumb}</span>
+    <span class="label" style="text-align:center;">{volume}</span>
+    <span class="label">Last updated · {lastUpdated}</span>
+  </div>
+  <h1 set:html={headline} />
+  <p class="lede">{lede}</p>
+</section>
+
+<section class="wrap" style="padding-top: var(--s-6); padding-bottom: var(--s-6);">
+  <div style="display: flex; flex-wrap: wrap; gap: var(--s-3); border-top: 1px solid var(--line); padding-top: var(--s-5);">
+    {sections.map((s, i) => (
+      <a href={`#${sectionId(s.number, i)}`} class="btn btn-ghost" style="padding: 0.55rem 1rem; font-size: 0.85rem;">
+        {s.number} — {s.title}
+      </a>
+    ))}
+  </div>
+</section>
+
+{sections.map((s, i) => (
+  <section class="section-tight wrap" id={sectionId(s.number, i)}>
+    <header class="section-head">
+      <span class="num">{s.number}</span>
+      <h2 class="title">{s.title}.</h2>
+      <span class="meta">{s.meta}</span>
+    </header>
+
+    <div class="faq-list">
+      {s.items?.map((item: any) => (
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            <span>{item.question}</span>
+            <span class="faq-toggle">+</span>
+          </button>
+          <div class="faq-a">
+            <div class="faq-a-inner" set:html={renderAnswer(item)} />
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+))}
+
+<section class="section">
+  <div class="wrap text-center">
+    <h2 class="display" style="max-width: 18ch; margin-inline: auto;">Still have a <em class="italic-display">question?</em></h2>
+    <p class="lede mt-5" style="margin-inline: auto;">WhatsApp us a photo of your space — we'll come back with an honest answer.</p>
+    <div class="flex gap-3 flex-wrap mt-6" style="justify-content: center;">
+      <a class="btn btn-primary" href="https://wa.me/447398224061">WhatsApp 07398 224061 <span class="arrow">→</span></a>
+      <a class="btn btn-ghost" href="/contact/">Send a message</a>
+    </div>
+  </div>
+</section>
+
+</Base>

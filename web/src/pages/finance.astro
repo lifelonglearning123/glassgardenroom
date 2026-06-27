@@ -1,0 +1,133 @@
+---
+import Base from '~/layouts/Base.astro';
+import { fetchOne } from '~/lib/sanity';
+import { siteSettingsQuery, financePageQuery } from '~/lib/queries';
+import { renderInline } from '~/lib/portableText';
+import type { SiteSettings } from '~/types';
+
+const [settings, page] = await Promise.all([
+  fetchOne<SiteSettings>(siteSettingsQuery),
+  fetchOne<any>(financePageQuery),
+]);
+
+const head = page?.pageHead;
+const breadcrumb = head?.breadcrumb ?? '— Service / Finance';
+const labelMid   = head?.label      ?? '0% APR available';
+const headline   = head?.headline ? renderInline(head.headline) : 'A garden room, in monthly <em>chapters.</em>';
+const lede       = head?.lede     ?? 'Spread your investment across 12, 24 or 36 months — including a genuine 0% APR option on selected plans. No early-repayment penalties, no hidden fees, no waiting to start your project.';
+
+const pageTitle = page?.seo?.title ?? 'Finance — 12, 24 or 36 months | Glass Garden Rooms';
+const pageDesc  = page?.seo?.description ?? 'Spread your veranda or garden room over 12, 24 or 36 months. 0% APR on selected plans. Live calculator. FCA-regulated finance via Ideal4Finance.';
+---
+<Base title={pageTitle} description={pageDesc} seo={page?.seo} settings={settings}>
+
+<section class="page-head wrap">
+  <div class="page-head-row">
+    <span class="breadcrumb">{breadcrumb}</span>
+    <span class="label" style="text-align:center;">{labelMid}</span>
+    <span class="label">FCA regulated</span>
+  </div>
+  <h1 set:html={headline} />
+  <p class="lede">{lede}</p>
+</section>
+
+<section class="section wrap">
+  <header class="section-head">
+    <span class="num">№ 01</span>
+    <h2 class="title">An estimate, in real time.</h2>
+    <span class="meta">Illustrative only</span>
+  </header>
+
+  <div class="calc reveal">
+    <div class="calc-inputs">
+      <div class="range-field">
+        <label>
+          <span>Project amount</span>
+          <strong id="calc-amount-label" class="serif" style="color: var(--moss); font-style: italic;">£10,000</strong>
+        </label>
+        <input id="calc-amount" type="range" min="2500" max="40000" step="500" value="10000" />
+      </div>
+      <div class="range-field">
+        <label>
+          <span>Repayment term</span>
+          <strong id="calc-term-label" class="serif" style="color: var(--moss); font-style: italic;">24 months</strong>
+        </label>
+        <input id="calc-term" type="range" min="12" max="60" step="12" value="24" />
+      </div>
+      <p style="font-size: 0.8rem; color: var(--ink-mute); line-height: 1.6;">
+        Representative example only. The rate offered to you is provisional and depends on
+        your personal circumstances, the loan amount and the term. Subject to status.
+      </p>
+    </div>
+    <div class="calc-output">
+      <span class="label">Estimated monthly</span>
+      <div class="calc-monthly" id="calc-monthly">£441</div>
+      <span class="calc-period">per month</span>
+      <div class="calc-summary">
+        <span>Total payable: <strong id="calc-total">£10,584</strong></span>
+        <span>Rate: <strong id="calc-interest">9.9% APR</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<section class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <span class="num">№ 02</span>
+      <h2 class="title">How it works.</h2>
+      <span class="meta">Quick approval</span>
+    </header>
+
+    <div class="process">
+      <div class="process-step reveal"><span class="num">i.</span><h4>Get your quote</h4><p>Survey, design, written quote — no obligation.</p></div>
+      <div class="process-step reveal"><span class="num">ii.</span><h4>Choose a term</h4><p>12, 24 or 36 months. 0% APR on selected plans.</p></div>
+      <div class="process-step reveal"><span class="num">iii.</span><h4>Soft-search apply</h4><p>Through Ideal4Finance — no impact on your credit until accepted.</p></div>
+      <div class="process-step reveal"><span class="num">iv.</span><h4>Build begins</h4><p>Finance doesn't delay your project — we get to work the moment it's signed.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section wrap">
+  <div class="editorial">
+    <div class="editorial-text reveal">
+      <span class="eyebrow">Why finance through us</span>
+      <h2 class="h2 mt-4">Honest <em class="italic-display">finance</em>, not a gimmick.</h2>
+      <ul class="bullets">
+        <li><span>0% APR on selected plans</span></li>
+        <li><span>No hidden fees</span></li>
+        <li><span>No early-repayment penalties</span></li>
+        <li><span>Quick approval, often same-day</span></li>
+        <li><span>Soft-search — no credit-file impact</span></li>
+        <li><span>Doesn't delay your start date</span></li>
+      </ul>
+      <div class="mt-6">
+        <a class="btn btn-moss" href="https://ideal4finance.com/retail/calculator/ggrooms" target="_blank" rel="noopener">
+          Apply via Ideal4Finance <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+    <div class="editorial-image reveal">
+      <img src="/images/69af648713dc9c65234e9b6c.jpg" alt="A finished premium glass garden room beside a red brick home" />
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="wrap">
+    <div style="background: var(--bone-soft); border: 1px solid var(--line); padding: clamp(1.5rem, 3vw, 2.5rem); max-width: 80ch; margin-inline: auto;">
+      <span class="label">Regulatory disclosure</span>
+      <p style="margin-top: var(--s-3); font-size: 0.92rem; color: var(--ink-soft); line-height: 1.7;">
+        Glass Garden Rooms Ltd (Co. No. 15487442) is an introducer-appointed representative of
+        Ideal Sales Solutions Ltd, trading as Ideal4Finance. Ideal Sales Solutions Ltd is authorised
+        and regulated by the Financial Conduct Authority (FRN 703401). Finance is subject to status
+        and the rate offered is always provisional and depends upon your personal circumstances,
+        the loan amount and the term.
+      </p>
+    </div>
+  </div>
+</section>
+
+</Base>

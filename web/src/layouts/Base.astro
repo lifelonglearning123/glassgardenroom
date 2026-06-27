@@ -1,0 +1,44 @@
+---
+import Masthead from '~/components/Masthead.astro';
+import Footer   from '~/components/Footer.astro';
+import WhatsAppFloat from '~/components/WhatsAppFloat.astro';
+import type { SiteSettings, Seo } from '~/types';
+
+interface Props {
+  title: string;
+  description?: string;
+  seo?: Seo;
+  settings: SiteSettings | null;
+  ogImageUrl?: string;
+}
+
+const { title, description, seo, settings, ogImageUrl } = Astro.props;
+const finalTitle = seo?.title ?? title;
+const finalDesc  = seo?.description ?? description ?? settings?.defaultSeo?.description ?? '';
+const noindex    = seo?.noindex ?? settings?.defaultSeo?.noindex ?? false;
+const currentPath = new URL(Astro.request.url).pathname;
+---
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{finalTitle}</title>
+{finalDesc && <meta name="description" content={finalDesc} />}
+{noindex && <meta name="robots" content="noindex" />}
+<link rel="stylesheet" href="/css/style.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+<meta property="og:title" content={finalTitle} />
+{finalDesc && <meta property="og:description" content={finalDesc} />}
+<meta property="og:type" content="website" />
+</head>
+<body>
+  <Masthead settings={settings} currentPath={currentPath} />
+  <slot />
+  <Footer settings={settings} />
+  <WhatsAppFloat />
+  <script is:inline src="/js/main.js"></script>
+</body>
+</html>

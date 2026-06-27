@@ -1,0 +1,79 @@
+---
+import Base from '~/layouts/Base.astro';
+import { fetchOne, fetchMany } from '~/lib/sanity';
+import { siteSettingsQuery, journalListQuery } from '~/lib/queries';
+import { imgUrl, imgAlt } from '~/lib/image';
+import type { SiteSettings, JournalPost } from '~/types';
+
+const [settings, posts] = await Promise.all([
+  fetchOne<SiteSettings>(siteSettingsQuery),
+  fetchMany<JournalPost>(journalListQuery),
+]);
+
+// Fallback to the current three posts so the page still renders before Sanity is seeded.
+const fallback = [
+  { slug: 'glass-or-polycarbonate', tag: 'Guide',      date: '8 May 2026 · 4 min read', title: 'Glass or polycarbonate? An honest comparison.', excerpt: "Both are good. They're good at different things. Here's the unvarnished case for each, and when we'd quietly steer a customer one way or the other.", img: '/images/glass%20garden%20room%202.JPG',     alt: 'Glass roof veranda with afternoon light' },
+  { slug: 'the-river-house',        tag: 'Project',    date: '21 March 2026 · 6 min read', title: 'The River House — borrowing a view.',          excerpt: "A glass garden room set inches from the meadow's edge in Cambridgeshire — and what it taught us about the things you don't put in the brochure.", img: '/images/69af5ac0ace64743f2f64f40.jpg', alt: 'Aerial view of an aluminium veranda glass roof' },
+  { slug: 'why-aluminium',          tag: 'Reflection', date: '2 February 2026 · 5 min read', title: 'Why we build in aluminium, not timber.',      excerpt: "A short defence of a quiet metal — why aluminium suits English weather, English gardens, and a customer who'd rather not be re-staining a frame next spring.", img: '/images/glass%20garden%20room%203.jpg', alt: 'Premium fully-enclosed glass garden room beside a swimming pool' },
+];
+
+type Card = { href: string; tag: string; date: string; title: string; excerpt: string; img: string; alt: string };
+
+const cards: Card[] = posts.length
+  ? posts.map((p) => ({
+      href: `/journal/${p.slug.current}/`,
+      tag: 'Journal',
+      date: p.publishedAt ? `${new Date(p.publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}${p.author ? ' · ' + p.author : ''}` : '',
+      title: p.title,
+      excerpt: p.excerpt ?? '',
+      img: imgUrl(p.heroImage),
+      alt: imgAlt(p.heroImage, p.title),
+    }))
+  : fallback.map((f) => ({ href: `/journal/${f.slug}/`, ...f }));
+---
+<Base title="Journal | Glass Garden Rooms" description="Notes from the workshop — guides, project stories, and quietly opinionated pieces on aluminium verandas, glass garden rooms and how to live well outdoors." settings={settings}>
+
+<section class="page-head wrap">
+  <div class="page-head-row">
+    <span class="breadcrumb">— Journal</span>
+    <span class="label" style="text-align:center;">Notes from the workshop</span>
+    <span class="label">Vol. 01</span>
+  </div>
+  <h1>Quietly <em>written,</em> occasionally posted.</h1>
+  <p class="lede">
+    Field notes, project stories, and the odd opinion piece — on aluminium architecture,
+    English weather, and what makes a garden room worth building.
+  </p>
+</section>
+
+<section class="section wrap">
+  <div class="journal-grid">
+    {cards.map((c) => (
+      <article class="journal-card reveal">
+        <a class="journal-media" href={c.href}>
+          <span class="journal-tag">{c.tag}</span>
+          <img loading="lazy" src={c.img} alt={c.alt} />
+        </a>
+        <div class="journal-body">
+          {c.date && <span class="journal-date">{c.date}</span>}
+          <h2 class="journal-title"><a href={c.href}>{c.title}</a></h2>
+          <p class="journal-excerpt">{c.excerpt}</p>
+          <a class="journal-link" href={c.href}>Read the piece <span class="arrow">→</span></a>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap text-center">
+    <h2 class="display" style="max-width: 18ch; margin-inline: auto;">Got a question we haven't <em class="italic-display">written</em> about?</h2>
+    <p class="lede mt-5" style="margin-inline: auto;">Send a WhatsApp on 07398 224061 or email us — we'll usually answer the same day.</p>
+    <div class="flex gap-3 flex-wrap mt-6" style="justify-content: center;">
+      <a class="btn btn-primary" href="/contact/">Request a quote <span class="arrow">→</span></a>
+      <a class="btn btn-ghost" href="/faq/">Read the FAQ</a>
+    </div>
+  </div>
+</section>
+
+</Base>

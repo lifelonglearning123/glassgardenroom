@@ -1,0 +1,438 @@
+---
+import Base from '~/layouts/Base.astro';
+import { fetchOne } from '~/lib/sanity';
+import { siteSettingsQuery, homePageQuery } from '~/lib/queries';
+import { renderInline } from '~/lib/portableText';
+import { imgUrl } from '~/lib/image';
+import type { SiteSettings, HomePage } from '~/types';
+
+const [settings, page] = await Promise.all([
+  fetchOne<SiteSettings>(siteSettingsQuery),
+  fetchOne<HomePage>(homePageQuery),
+]);
+
+// Cinematic hero — Sanity overrides, with original content as fallback.
+const hero = page?.cinematicHero;
+const heroVideo  = hero?.videoUrl ?? '/vidoes/69930cae8ef1b975f11349e6.mp4';
+const heroPoster = imgUrl(hero?.posterImage) || '/images/69af57437c270219ab46766e.jpeg';
+const heroLabels = hero?.metaLabels?.length ? hero.metaLabels : [
+  'Vol. 01 — Spring / Summer 2026',
+  'Aluminium · Glass · Light',
+  '№ 04918',
+];
+const heroHeadline = hero?.headline
+  ? renderInline(hero.headline)
+  : 'Bring the<br/><em>outdoors</em> in.';
+const heroLede = hero?.lede
+  ?? 'Bespoke aluminium verandas and glass garden rooms — designed, manufactured and installed by a family of craftspeople in Warwickshire.';
+const heroCtas = hero?.ctas?.length ? hero.ctas : [
+  { label: 'Explore the collection', href: '/products/',   variant: 'btn-bone' as const },
+  { label: 'Instant Price',          href: 'https://configurator.alfresko.co.uk/?dealerId=0c65eea4-80d9-4a26-b81f-0ef4e0659bd9', variant: 'btn-outline-bone' as const, external: true },
+  { label: 'Book a free survey',     href: '/contact/',    variant: 'btn-outline-bone' as const },
+];
+const heroCredit = hero?.creditLine
+  ?? '— Photographed in Solihull, March 2026.\nAnthracite frame, 8.8mm laminated glass.';
+
+// Tickertape
+const tickerPhrases = page?.tickertape?.length ? page.tickertape : [
+  'Bespoke aluminium verandas',
+  '5-year structural warranty',
+  'Family-run since 2014',
+  'Installed across the Midlands and beyond',
+  '0% APR finance available',
+  '4–6 week lead time',
+  'NHBC accepted',
+];
+
+// USPs
+const usps = page?.usps?.length ? page.usps : [
+  { number: 'i.',   title: 'Made for British weather', body: '6063-T6 aluminium with AkzoNobel powder coatings. Engineered to last decades, not seasons.' },
+  { number: 'ii.',  title: 'Five-year guarantee',      body: 'Comprehensive cover on all structural components. Ten years on selected carport ranges.' },
+  { number: 'iii.', title: 'Transparent pricing',      body: 'Fair, year-round prices. No fictional sales, no inflated quotes — just honest numbers.' },
+  { number: 'iv.',  title: 'Family-run, hands-on',     body: "From your first survey to the final handover, you'll deal with the people who built it." },
+];
+
+// Featured product cards — Sanity overrides, otherwise hardcoded.
+type CardSeed = { href: string; tag: string; title: string; price: string; desc: string; img: string; alt: string; linkLabel: string };
+const featured: CardSeed[] = page?.featuredProducts?.length
+  ? page.featuredProducts.map((p) => ({
+      href: `/products/${p.slug.current}/`,
+      tag: p.category === 'glass-room' ? 'Garden Room' : p.category === 'veranda' ? 'Veranda' : 'Carport',
+      title: p.name,
+      price: p.fromPrice?.amount ? `${p.fromPrice.displayPrefix ?? 'from £'}${p.fromPrice.amount.toLocaleString('en-GB')}` : '',
+      desc: p.strapline ?? '',
+      img: imgUrl(p.heroImage),
+      alt: p.heroImage?.alt ?? p.name,
+      linkLabel: `Discover ${p.name} →`,
+    }))
+  : [
+      { href: '/verandas/',     tag: 'Veranda',     title: 'The Provence',           price: 'from £4,000',  desc: 'A glass-roofed veranda for everyday use. 8.8mm laminated glass, integrated gutters, four colour finishes.', img: '/images/68c299cb43ec1c230ea3109a.jpeg', alt: 'Anthracite aluminium veranda over a stone-paved patio with corner sofa, brick home behind', linkLabel: 'Discover Provence →' },
+      { href: '/garden-rooms/', tag: 'Garden Room', title: 'The Premium Glass Room', price: 'from £18,000', desc: 'A fully-enclosed extension of your home. 10mm safety-glass sliders, 360-degree views, year-round comfort.', img: '/images/glass%20garden%20room%20Toulouse%20Glass%20Garden%20Room.jpg', alt: 'A fully enclosed glass garden room with anthracite frame, set against a modern white house', linkLabel: 'Discover the Glass Room →' },
+      { href: '/carports/',     tag: 'Carport',     title: 'The Bordeaux Carport',   price: 'from £2,500',  desc: '18mm polycarbonate roofing with integrated guttering. Single, double or bespoke configurations.', img: '/images/69931cd51a38a0e65b65cf24.jpeg', alt: 'A modern aluminium carport with motorbikes parked underneath', linkLabel: 'Discover Bordeaux →' },
+    ];
+
+// Testimonials
+const testimonials = page?.featuredTestimonials?.length ? page.featuredTestimonials : [
+  { _id: '1', customerName: 'David Taylor',   location: 'Nottingham', quote: 'Outstanding from quote to completion. The glass roof veranda exceeded all our expectations.' },
+  { _id: '2', customerName: 'Sarah Johnson',  location: 'Leicester',  quote: 'Absolutely stunning veranda — the installation was seamless and professional. Our garden has been completely transformed.' },
+  { _id: '3', customerName: 'Emma Williams',  location: 'Coventry',   quote: 'Best investment we made for our home. Beautiful craftsmanship and attention to detail throughout.' },
+];
+
+const pageTitle = page?.seo?.title ?? 'Glass Garden Rooms — Bespoke Aluminium Verandas & Glass Garden Rooms';
+const pageDesc  = page?.seo?.description ?? 'Family-run UK manufacturer of bespoke aluminium verandas, glass garden rooms and carports. Expert installation, transparent pricing, 5-year warranty. Showroom in Nuneaton, Warwickshire.';
+---
+<Base title={pageTitle} description={pageDesc} seo={page?.seo} settings={settings}>
+
+<!-- ============ CINEMATIC HERO ============ -->
+<section class="cinema">
+  <div class="cinema-media">
+    <video autoplay muted loop playsinline preload="metadata" poster={heroPoster}>
+      <source src={heroVideo} type="video/mp4" />
+    </video>
+  </div>
+
+  <div class="cinema-inner">
+    <div class="cinema-meta">
+      {heroLabels.map((l, i) => (
+        <span class={`label${i === 1 ? ' hidden-mobile' : ''}`}>{l}</span>
+      ))}
+    </div>
+
+    <div class="cinema-headline">
+      <h1 class="display" set:html={heroHeadline} />
+      <p class="cinema-lede">{heroLede}</p>
+    </div>
+
+    <div class="cinema-foot">
+      <div class="cinema-actions">
+        {heroCtas.map((cta) => (
+          <a
+            class={`btn ${cta.variant ?? 'btn-bone'}`}
+            href={cta.href}
+            target={cta.external ? '_blank' : undefined}
+            rel={cta.external ? 'noopener' : undefined}
+          >
+            {cta.label} <span class="arrow">→</span>
+          </a>
+        ))}
+      </div>
+      <p class="cinema-credit" set:html={heroCredit.replace(/\n/g, '<br/>')} />
+    </div>
+  </div>
+  <span class="scroll-cue">Scroll to wander</span>
+</section>
+
+<!-- ============ TICKERTAPE ============ -->
+<div class="tickertape" aria-hidden="true">
+  <div class="tickertape-track">
+    {tickerPhrases.map((p) => <span>{p}</span>)}
+  </div>
+</div>
+
+<!-- ============ USP STRIP ============ -->
+<section class="usp-strip" aria-label="Why Glass Garden Rooms">
+  {usps.map((u) => (
+    <div class="usp">
+      <span class="usp-num">{u.number}</span>
+      <h3 class="usp-title">{u.title}</h3>
+      <p class="usp-desc">{u.body}</p>
+    </div>
+  ))}
+</section>
+
+<!-- ============ PROMO (static — bespoke editorial) ============ -->
+<section class="promo">
+  <div class="wrap promo-inner">
+    <span class="promo-num reveal">−20%</span>
+    <p class="promo-text reveal">
+      The Spring Deal — twenty per cent across every veranda, glass garden room and carport for orders confirmed before June 2026.
+      <small>Cannot be combined with other offers · Subject to survey</small>
+    </p>
+    <span class="promo-code reveal">Use code <strong>STEALDEAL20</strong></span>
+  </div>
+</section>
+
+<!-- ============ COLLECTION ============ -->
+<section class="section wrap">
+  <header class="section-head">
+    <span class="num">№ 01</span>
+    <h2 class="title">Our Collection<br/></h2>
+    <span class="meta">Selected works<br/>2026 catalogue</span>
+  </header>
+
+  <div class="collection">
+    {featured.map((c) => (
+      <a class="card reveal" href={c.href}>
+        <div class="card-media">
+          <span class="card-tag">{c.tag}</span>
+          <img loading="lazy" src={c.img} alt={c.alt} />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">{c.title}</h3>
+          {c.price && <span class="card-price">{c.price}</span>}
+          <p class="card-desc">{c.desc}</p>
+          <span class="card-link">{c.linkLabel}</span>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <div class="flex gap-3 flex-wrap" style="justify-content: center; margin-top: var(--s-7);">
+    <a class="btn btn-ghost" href="/products/">View the full catalogue <span class="arrow">→</span></a>
+    <a class="btn btn-primary" href="https://configurator.alfresko.co.uk/?dealerId=0c65eea4-80d9-4a26-b81f-0ef4e0659bd9" target="_blank" rel="noopener">Instant Price <span class="arrow">→</span></a>
+    <a class="btn btn-ghost" href="/assets/glass-garden-rooms-brochure.pdf" download>Download the brochure <small style="opacity:.65;">(PDF · 13MB)</small></a>
+  </div>
+</section>
+
+<!-- ============ FULL-BLEED MOMENT (static) ============ -->
+<section class="moment">
+  <div class="moment-bg" style="background-image: url('/images/69935c6a3b3cc9652ef257ae.jpeg');"></div>
+  <div class="moment-inner">
+    <span class="eyebrow">A Moment · 7:42 a.m.</span>
+    <h2 class="moment-h">
+      The first warm <em class="italic-display">coffee</em> of the year, six weeks earlier than you remember.
+    </h2>
+    <p class="moment-text">
+      A glass roof is not, really, about the room. It is about the morning you didn't expect —
+      the light cutting cleanly through April, the rain you can hear but not feel, the small
+      pleasure of being outside without the cold telling you to come back in.
+    </p>
+  </div>
+</section>
+
+<!-- ============ PULL QUOTE (static) ============ -->
+<section class="section-tight wrap">
+  <p class="pullquote reveal">
+    Quietly, in <em>Warwickshire,</em> we make a sort of architecture<br/>
+    that turns the back of a house into the front of one.
+  </p>
+</section>
+
+<!-- ============ FEATURED SHOWCASE — The River House (static) ============ -->
+<section class="section wrap">
+  <header class="section-head">
+    <span class="num">№ 02</span>
+    <h2 class="title">A featured project<br/><em class="italic-display">The River House.</em></h2>
+    <span class="meta">Cambridgeshire<br/>Installed Feb 2026</span>
+  </header>
+
+  <div class="showcase reveal">
+    <div class="showcase-media">
+      <span class="frame-no">— Frame 04</span>
+      <img loading="lazy" src="/images/glass%20garden%20room%202.JPG" alt="Glass garden room with sliding doors looking out over a river and meadow at golden hour" />
+    </div>
+    <div class="showcase-text">
+      <span class="eyebrow">Featured · Riverside install</span>
+      <h3 class="h2">A glass room that <em class="italic-display">borrows</em> the river.</h3>
+      <p class="lede">
+        Built to make the most of an irreplaceable view — a fully enclosed glass garden room
+        with full-height sliders, set inches from the meadow's edge. Year-round, weatherproof,
+        and the quietest place in the house at 5 p.m.
+      </p>
+      <dl class="showcase-meta">
+        <div><dt>Footprint</dt><dd>5.4 × 3.6m</dd></div>
+        <div><dt>Glass</dt><dd>10mm tempered</dd></div>
+        <div><dt>Build time</dt><dd>4 days</dd></div>
+      </dl>
+      <div class="mt-6">
+        <a class="btn btn-moss" href="/garden-rooms/">
+          Explore glass rooms <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ============ MARQUEE GALLERY (static) ============ -->
+<div class="marquee" aria-label="Recent installations">
+  <div class="marquee-track">
+    {['BRIGHTON','BRINKLOW','CHELTENHAM','LEICESTER','LICHFIELD','NORTHAMPTON','NOTTINGHAM','RUGBY','STONEY STANTON','TAMWORTH'].map((city) => (
+      <figure class="marquee-tile">
+        <img loading="lazy" src={`/scolling/${city.replace(/ /g, '%20')}.png`} alt={`Recent installation in ${city.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}`} />
+        <figcaption class="marquee-tile-cap">{city.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}</figcaption>
+      </figure>
+    ))}
+  </div>
+</div>
+
+<!-- ============ EDITORIAL — hup! (static) ============ -->
+<section class="section wrap">
+  <div class="editorial">
+    <div class="editorial-image reveal">
+      <img loading="lazy" src="/images/69935c6a0978098fe5591d5b.jpg" alt="A bright glass garden room interior with sectional sofa and views of the garden" />
+    </div>
+    <div class="editorial-text reveal">
+      <span class="eyebrow">Featured · The hup! System</span>
+      <h2 class="h2 mt-4">An <em class="italic-display">extension</em>, built five times faster.</h2>
+      <p class="lede mt-5">
+        The hup! system marries super-insulated walls with a choice of glass or solid roofing
+        — giving you a genuine, year-round room without the delays, dust or disruption of
+        traditional building works.
+      </p>
+      <ul class="bullets">
+        <li><span>Super-insulated wall panels</span></li>
+        <li><span>Glass or solid roof options</span></li>
+        <li><span>Permitted-development friendly</span></li>
+        <li><span>5× faster than masonry</span></li>
+      </ul>
+      <div class="mt-6">
+        <a class="btn btn-moss" href="/garden-rooms/">
+          Read the hup! brochure <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAT STRIP (static) ============ -->
+<section class="stat-strip" aria-label="By the numbers">
+  <div class="stat"><span class="stat-num">412</span><span class="stat-label">Installs to date</span><span class="stat-text">Across Warwickshire and beyond, since 2014.</span></div>
+  <div class="stat"><span class="stat-num">4.9</span><span class="stat-label">Google rating</span><span class="stat-text">From 127 verified reviews. We read every one.</span></div>
+  <div class="stat"><span class="stat-num">1–6</span><span class="stat-label">Days on site</span><span class="stat-text">Most verandas: a day or two. Glass rooms: less than a week.</span></div>
+  <div class="stat"><span class="stat-num">£0</span><span class="stat-label">Survey cost</span><span class="stat-text">No deposit to talk. No charge to walk the garden.</span></div>
+</section>
+
+<!-- ============ MOSAIC GALLERY (static) ============ -->
+<section class="section wrap">
+  <header class="section-head">
+    <span class="num">№ 03</span>
+    <h2 class="title">A wander through<br/><em class="italic-display">recent gardens.</em></h2>
+    <span class="meta">From the archive<br/>2025–26</span>
+  </header>
+
+  <div class="mosaic">
+    <figure class="m1"><img loading="lazy" src="/images/69af57437c270219ab46766e.jpeg" alt="Premium glass room with chandelier-style lighting at a modern wood-clad home" /><figcaption>The Pavilion</figcaption></figure>
+    <figure class="m2"><img loading="lazy" src="/images/glass%20garden%20room%203.jpg" alt="Premium fully-enclosed glass garden room beside a swimming pool" /><figcaption>Poolside</figcaption></figure>
+    <figure class="m3"><img loading="lazy" src="/images/69af5ac0ace64743f2f64f40.jpg" alt="Aerial view of an aluminium veranda glass roof" /><figcaption>Roof study</figcaption></figure>
+    <figure class="m4"><img loading="lazy" src="/images/699505855c226558b0fec04a.jpg" alt="Sunlit interior of a glass enclosure with garden view, sofa, and dining table" /><figcaption>The morning room</figcaption></figure>
+    <figure class="m5"><img loading="lazy" src="/images/69931b0d3b3cc94ba6e53be4.jpg" alt="Modern white house with veranda and hedge boundary" /><figcaption>Whitehouse</figcaption></figure>
+    <figure class="m6"><img loading="lazy" src="/images/69af64878d3eae103bbd3777.jpg" alt="Glass garden room interior with views over a forest and pond" /><figcaption>Forest edge</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ MOMENT — rain (static) ============ -->
+<section class="moment">
+  <div class="moment-bg" style="background-image: url('/images/6996ba250a91140dfbf3a44a.jpg');"></div>
+  <div class="moment-inner">
+    <span class="eyebrow">A Moment · 9:18 p.m.</span>
+    <h2 class="moment-h">Rain on glass. The garden, <em class="italic-display">lit.</em> Nowhere you'd rather be.</h2>
+    <p class="moment-text">
+      A well-built glass room earns its keep on the worst nights, not the best ones.
+      The wind goes round you. The lamps come on. The garden, finally, becomes the view
+      it was always supposed to be.
+    </p>
+  </div>
+</section>
+
+<!-- ============ PROCESS (static) ============ -->
+<section class="section wrap">
+  <header class="section-head">
+    <span class="num">№ 04</span>
+    <h2 class="title">From a quiet conversation<br/>to a finished room.</h2>
+    <span class="meta">Lead time<br/>4–6 weeks</span>
+  </header>
+
+  <div class="process">
+    <div class="process-step reveal"><span class="num">i.</span><h4>Survey</h4><p>A free, unhurried site visit (45 minutes to two hours) — or a remote WhatsApp survey if you're outside the Midlands.</p></div>
+    <div class="process-step reveal"><span class="num">ii.</span><h4>Design</h4><p>We translate your space into a bespoke design — sizes, finishes, glass type, lighting, heating, blinds.</p></div>
+    <div class="process-step reveal"><span class="num">iii.</span><h4>Build</h4><p>Verandas install in 1–2 days. Glass garden rooms in 3–6. Always done carefully, never rushed.</p></div>
+    <div class="process-step reveal"><span class="num">iv.</span><h4>Handover</h4><p>A full walk-through, maintenance notes, and a five-year warranty in your inbox before we leave.</p></div>
+  </div>
+</section>
+
+<!-- ============ QUOTES — Sanity-driven testimonials ============ -->
+<section class="quotes">
+  <div class="wrap">
+    <header class="section-head">
+      <span class="num">№ 05</span>
+      <h2 class="title">Letters from the garden.</h2>
+      <span class="meta">4.9 ★★★★★<br/>127 Google reviews</span>
+    </header>
+
+    <div class="quote-grid">
+      {testimonials.map((t) => (
+        <figure class="quote reveal">
+          <span class="quote-stars">★★★★★</span>
+          <blockquote class="quote-text">{t.quote}</blockquote>
+          <figcaption class="quote-attr"><strong>{t.customerName}</strong>{t.location && ` · ${t.location}`}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINANCE TEASER (static) ============ -->
+<section class="section wrap">
+  <div class="editorial editorial-flip">
+    <div class="editorial-image reveal">
+      <img loading="lazy" src="/images/6995be7fd614c9e72b496cbc.jpeg" alt="A glass-roofed veranda set against a Dutch-style home in autumn" />
+    </div>
+    <div class="editorial-text reveal">
+      <span class="eyebrow">Finance · 0% APR available</span>
+      <h2 class="h2 mt-4">A garden room, <em class="italic-display">in monthly chapters.</em></h2>
+      <p class="lede mt-5">
+        Spread the investment over 12, 24 or 36 months — including a genuine 0% APR option on
+        selected plans. Quotes in real time, no obligation, no hidden fees.
+      </p>
+      <p style="margin-top: var(--s-5); font-size: 0.85rem; color: var(--ink-mute);">
+        Glass Garden Rooms Ltd is an introducer-appointed representative of Ideal Sales Solutions Ltd
+        (FRN 703401), regulated by the Financial Conduct Authority. Finance subject to status.
+      </p>
+      <div class="mt-6">
+        <a class="btn btn-primary" href="/finance/">
+          Use the calculator <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ TEASER (static — full FAQ on /faq/) ============ -->
+<section class="section-tight wrap">
+  <header class="section-head">
+    <span class="num">№ 06</span>
+    <h2 class="title">A few common questions.</h2>
+    <span class="meta"><a href="/faq/" style="text-decoration: underline; text-underline-offset: 4px;">All FAQs →</a></span>
+  </header>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false"><span>Do I need planning permission?</span><span class="faq-toggle">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Generally, planning permission isn't required for a veranda or garden room — most fall under permitted development. We always recommend confirming with your local authority, and on every survey we'll talk you through it.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false"><span>How long does installation take?</span><span class="faq-toggle">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">On average a veranda takes 1–2 days; a glass garden room 3–6. We never rush — it takes as long as it needs to be done correctly.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false"><span>What deposit do I pay?</span><span class="faq-toggle">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Typically 25–50%, depending on the complexity of your project. We accept BACS, card, cheque or cash — but not American Express.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false"><span>Can I see the products before I commit?</span><span class="faq-toggle">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Of course. Visit our Nuneaton showroom by appointment (Mon–Thu 8–3, Fri 8–1), or our surveyor will bring physical samples to your home.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA (static) ============ -->
+<section class="section">
+  <div class="wrap text-center">
+    <span class="eyebrow" style="justify-content: center;">Step inside</span>
+    <h2 class="display mt-5" style="text-wrap: balance; max-width: 18ch; margin-inline: auto;">
+      Begin with a <em class="italic-display">free survey.</em>
+    </h2>
+    <p class="lede mt-5" style="margin-inline: auto;">
+      No pressure, no inflated prices, no salesman patter. Just measurements, samples,
+      and an honest conversation about what would work for your home.
+    </p>
+    <div class="flex gap-3 flex-wrap mt-6" style="justify-content: center;">
+      <a class="btn btn-primary" href="/contact/">Book a free survey <span class="arrow">→</span></a>
+      <a class="btn btn-ghost" href="tel:02475102899">Call 024 7510 2899</a>
+    </div>
+  </div>
+</section>
+
+</Base>
