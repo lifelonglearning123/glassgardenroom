@@ -1,0 +1,1858 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "label",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Internal path like /contact or full URL like https://…",
+        "name": "href",
+        "type": "string",
+        "title": "Link"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Bone (filled)",
+              "value": "btn-bone"
+            },
+            {
+              "title": "Bone (outline)",
+              "value": "btn-outline-bone"
+            },
+            {
+              "title": "Ghost",
+              "value": "btn-ghost"
+            },
+            {
+              "title": "Mini (header style)",
+              "value": "cta-mini"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "btn-bone",
+        "name": "variant",
+        "type": "string",
+        "title": "Button style"
+      },
+      {
+        "initialValue": false,
+        "name": "external",
+        "type": "boolean",
+        "title": "Opens in new tab"
+      }
+    ],
+    "name": "cta",
+    "type": "object",
+    "title": "Call to action"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "asset",
+        "type": "image",
+        "title": "Image file"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 4
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Describe the image for screen readers and SEO.",
+        "name": "alt",
+        "type": "string",
+        "title": "Alt text"
+      },
+      {
+        "description": "Optional small caption shown below the image.",
+        "name": "caption",
+        "type": "string"
+      }
+    ],
+    "name": "imageWithCaption",
+    "type": "object",
+    "title": "Image"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "majorImage",
+        "type": "imageWithCaption",
+        "title": "Major image (large left)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 4
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "type": "imageWithCaption",
+            "title": "Image"
+          }
+        ],
+        "name": "minorImages",
+        "type": "array",
+        "title": "Minor images (stacked right)"
+      }
+    ],
+    "name": "gallery",
+    "type": "object",
+    "title": "Lifestyle gallery"
+  },
+  {
+    "options": {
+      "collapsible": true,
+      "collapsed": true
+    },
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 70
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Shows as the browser tab title and in Google results. ~55 chars.",
+        "name": "title",
+        "type": "string",
+        "title": "Page title"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 180
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "The summary that appears under the title in Google. ~155 chars.",
+        "name": "description",
+        "type": "text",
+        "title": "Meta description"
+      },
+      {
+        "description": "Used when the page is shared on Facebook, WhatsApp, LinkedIn.",
+        "name": "ogImage",
+        "type": "imageWithCaption",
+        "title": "Social preview image"
+      },
+      {
+        "initialValue": false,
+        "name": "noindex",
+        "type": "boolean",
+        "title": "Hide from search engines"
+      }
+    ],
+    "name": "seo",
+    "type": "object",
+    "title": "SEO"
+  },
+  {
+    "of": [
+      {
+        "marks": {
+          "annotations": [
+            {
+              "fields": [
+                {
+                  "name": "href",
+                  "type": "string",
+                  "title": "URL"
+                },
+                {
+                  "initialValue": false,
+                  "name": "external",
+                  "type": "boolean",
+                  "title": "Opens in new tab"
+                }
+              ],
+              "name": "link",
+              "type": "object"
+            }
+          ],
+          "decorators": [
+            {
+              "value": "strong",
+              "title": "Strong"
+            },
+            {
+              "value": "em",
+              "title": "Italic"
+            },
+            {
+              "value": "italicDisplay",
+              "title": "Display italic"
+            }
+          ]
+        },
+        "lists": [
+          {
+            "value": "bullet",
+            "title": "Bullet"
+          },
+          {
+            "value": "number",
+            "title": "Numbered"
+          }
+        ],
+        "styles": [
+          {
+            "value": "normal",
+            "title": "Normal"
+          },
+          {
+            "value": "h2",
+            "title": "H2"
+          },
+          {
+            "value": "h3",
+            "title": "H3"
+          },
+          {
+            "value": "h4",
+            "title": "H4"
+          },
+          {
+            "value": "lede",
+            "title": "Lede (large intro)"
+          },
+          {
+            "value": "blockquote",
+            "title": "Quote"
+          }
+        ],
+        "of": [],
+        "type": "block"
+      },
+      {
+        "type": "imageWithCaption",
+        "title": "Image"
+      }
+    ],
+    "name": "richText",
+    "type": "array",
+    "title": "Rich text"
+  },
+  {
+    "fields": [
+      {
+        "description": "Small label above the heading, e.g. \"№ 01 · Premium Glass Room\".",
+        "name": "eyebrow",
+        "type": "string"
+      },
+      {
+        "description": "Use italic for emphasis, e.g. \"Quietly engineered. *Endlessly bespoke.*\"",
+        "name": "heading",
+        "type": "richText"
+      },
+      {
+        "name": "body",
+        "type": "richText"
+      },
+      {
+        "name": "image",
+        "type": "imageWithCaption"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Image on left",
+              "value": "left"
+            },
+            {
+              "title": "Image on right",
+              "value": "right"
+            },
+            {
+              "title": "Full bleed",
+              "value": "full-bleed"
+            },
+            {
+              "title": "No image",
+              "value": "none"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "right",
+        "name": "imagePosition",
+        "type": "string"
+      },
+      {
+        "name": "cta",
+        "type": "cta",
+        "title": "Call to action"
+      }
+    ],
+    "name": "editorialBlock",
+    "type": "object",
+    "title": "Editorial block"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "backgroundImage",
+        "type": "imageWithCaption"
+      },
+      {
+        "description": "Small label, e.g. \"Year-round · 18°C inside\".",
+        "name": "eyebrow",
+        "type": "string"
+      },
+      {
+        "name": "heading",
+        "type": "richText"
+      },
+      {
+        "rows": 3,
+        "name": "body",
+        "type": "text"
+      }
+    ],
+    "name": "momentBlock",
+    "type": "object",
+    "title": "Moment"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Glass Garden Rooms",
+        "name": "businessName",
+        "type": "string"
+      },
+      {
+        "name": "phone",
+        "type": "string",
+        "title": "Phone / WhatsApp"
+      },
+      {
+        "name": "email",
+        "type": "string"
+      },
+      {
+        "fields": [
+          {
+            "name": "line1",
+            "type": "string"
+          },
+          {
+            "name": "town",
+            "type": "string"
+          },
+          {
+            "name": "county",
+            "type": "string"
+          },
+          {
+            "name": "postcode",
+            "type": "string"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "mapUrl",
+            "type": "url",
+            "title": "Google Maps link"
+          }
+        ],
+        "name": "address",
+        "type": "object",
+        "title": "Showroom address"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "description": "e.g. \"Mon–Fri\"",
+                "name": "days",
+                "type": "string"
+              },
+              {
+                "description": "e.g. \"9:00 – 17:00\"",
+                "name": "hours",
+                "type": "string"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "showroomHours",
+        "type": "array",
+        "title": "Opening hours"
+      },
+      {
+        "fields": [
+          {
+            "name": "logo",
+            "type": "imageWithCaption"
+          },
+          {
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "label",
+                    "type": "string"
+                  },
+                  {
+                    "name": "href",
+                    "type": "string"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "nav",
+            "type": "array",
+            "title": "Navigation links"
+          },
+          {
+            "name": "ctaLabel",
+            "type": "string",
+            "title": "CTA button label"
+          },
+          {
+            "name": "ctaHref",
+            "type": "string",
+            "title": "CTA button link"
+          }
+        ],
+        "name": "masthead",
+        "type": "object",
+        "title": "Header"
+      },
+      {
+        "fields": [
+          {
+            "rows": 2,
+            "name": "tagline",
+            "type": "text"
+          },
+          {
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "heading",
+                    "type": "string"
+                  },
+                  {
+                    "of": [
+                      {
+                        "type": "cta",
+                        "title": "Call to action"
+                      }
+                    ],
+                    "name": "links",
+                    "type": "array"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "columns",
+            "type": "array",
+            "title": "Footer link columns"
+          },
+          {
+            "description": "e.g. © 2026 Glass Garden Rooms Ltd. Co. No. 15487442",
+            "name": "legalLine",
+            "type": "string",
+            "title": "Legal line"
+          }
+        ],
+        "name": "footer",
+        "type": "object"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "name": "icon",
+                "type": "imageWithCaption"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "trustBadges",
+        "type": "array",
+        "title": "Trust badges"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": true
+        },
+        "name": "defaultSeo",
+        "type": "seo",
+        "title": "Default SEO"
+      }
+    ],
+    "name": "siteSettings",
+    "type": "document",
+    "title": "Site settings"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "options": {
+              "accept": "video/mp4"
+            },
+            "name": "video",
+            "type": "file",
+            "title": "Background video (MP4)"
+          },
+          {
+            "name": "posterImage",
+            "type": "imageWithCaption",
+            "title": "Fallback image (shown while video loads)"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 3
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "e.g. \"Vol. 01 — Spring / Summer 2026\", \"Aluminium · Glass · Light\", \"№ 04918\"",
+            "of": [
+              {
+                "type": "string"
+              }
+            ],
+            "name": "metaLabels",
+            "type": "array",
+            "title": "Small labels above the headline"
+          },
+          {
+            "description": "Use italic for emphasis, e.g. \"Bring the *outdoors* in.\"",
+            "name": "headline",
+            "type": "richText"
+          },
+          {
+            "rows": 3,
+            "name": "lede",
+            "type": "text",
+            "title": "Subheading paragraph"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 3
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "of": [
+              {
+                "type": "cta",
+                "title": "Call to action"
+              }
+            ],
+            "name": "ctas",
+            "type": "array",
+            "title": "Buttons"
+          },
+          {
+            "rows": 2,
+            "description": "Small text at the bottom, e.g. \"Photographed in Solihull, March 2026.\"",
+            "name": "creditLine",
+            "type": "text",
+            "title": "Photo credit line"
+          }
+        ],
+        "name": "cinematicHero",
+        "type": "object",
+        "title": "Cinematic hero"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 3
+              },
+              {
+                "flag": "max",
+                "constraint": 10
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "5–8 short phrases that scroll across the page.",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "tickertape",
+        "type": "array",
+        "title": "Scrolling phrases"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 3
+              },
+              {
+                "flag": "max",
+                "constraint": 4
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "description": "e.g. \"i.\", \"ii.\", \"iii.\"",
+                "name": "number",
+                "type": "string"
+              },
+              {
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "rows": 3,
+                "name": "body",
+                "type": "text"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "usps",
+        "type": "array",
+        "title": "\"Why us\" boxes"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 4
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "to": [
+              {
+                "type": "product"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to product"
+          }
+        ],
+        "name": "featuredProducts",
+        "type": "array"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 3
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "to": [
+              {
+                "type": "testimonial"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to testimonial"
+          }
+        ],
+        "name": "featuredTestimonials",
+        "type": "array"
+      },
+      {
+        "fields": [
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "initialValue": true,
+            "name": "autoPopulate",
+            "type": "boolean",
+            "title": "Auto-pick latest 3 posts"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 3
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "of": [
+              {
+                "to": [
+                  {
+                    "type": "journalPost"
+                  }
+                ],
+                "type": "reference",
+                "title": "Reference to journal post"
+              }
+            ],
+            "hidden": "conditional",
+            "name": "manualPosts",
+            "type": "array",
+            "title": "Hand-picked posts"
+          }
+        ],
+        "name": "journalTeaser",
+        "type": "object",
+        "title": "Journal teaser"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": true
+        },
+        "name": "seo",
+        "type": "seo",
+        "title": "SEO"
+      }
+    ],
+    "name": "homePage",
+    "type": "document",
+    "title": "Home page"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "name": "breadcrumb",
+            "type": "string"
+          },
+          {
+            "name": "label",
+            "type": "string"
+          },
+          {
+            "name": "headline",
+            "type": "richText"
+          },
+          {
+            "rows": 3,
+            "name": "lede",
+            "type": "text"
+          }
+        ],
+        "name": "pageHead",
+        "type": "object"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Glass Garden Rooms",
+              "value": "glass-room"
+            },
+            {
+              "title": "Verandas",
+              "value": "veranda"
+            },
+            {
+              "title": "Carports",
+              "value": "carport"
+            }
+          ]
+        },
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "categoryOrder",
+        "type": "array",
+        "title": "Category display order"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Glass Garden Rooms",
+                      "value": "glass-room"
+                    },
+                    {
+                      "title": "Verandas",
+                      "value": "veranda"
+                    },
+                    {
+                      "title": "Carports",
+                      "value": "carport"
+                    }
+                  ]
+                },
+                "name": "category",
+                "type": "string"
+              },
+              {
+                "name": "eyebrow",
+                "type": "string"
+              },
+              {
+                "name": "heading",
+                "type": "richText"
+              },
+              {
+                "name": "body",
+                "type": "richText"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "categoryIntros",
+        "type": "array",
+        "title": "Per-category intros"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": true
+        },
+        "name": "seo",
+        "type": "seo"
+      }
+    ],
+    "name": "productsPage",
+    "type": "document",
+    "title": "Products page"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "name": "breadcrumb",
+            "type": "string"
+          },
+          {
+            "name": "label",
+            "type": "string"
+          },
+          {
+            "name": "headline",
+            "type": "richText"
+          },
+          {
+            "rows": 3,
+            "name": "lede",
+            "type": "text"
+          }
+        ],
+        "name": "pageHead",
+        "type": "object"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "description": "e.g. \"№ 01\"",
+                "name": "number",
+                "type": "string"
+              },
+              {
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "type": "richText"
+              },
+              {
+                "name": "image",
+                "type": "imageWithCaption"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "steps",
+        "type": "array",
+        "title": "Installation steps"
+      },
+      {
+        "of": [
+          {
+            "type": "editorialBlock",
+            "title": "Editorial block"
+          }
+        ],
+        "name": "editorial",
+        "type": "array",
+        "title": "Extra editorial blocks"
+      },
+      {
+        "of": [
+          {
+            "type": "cta",
+            "title": "Call to action"
+          }
+        ],
+        "name": "ctas",
+        "type": "array"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": true
+        },
+        "name": "seo",
+        "type": "seo"
+      }
+    ],
+    "name": "installationPage",
+    "type": "document",
+    "title": "Installation page"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "name": "breadcrumb",
+            "type": "string"
+          },
+          {
+            "name": "label",
+            "type": "string"
+          },
+          {
+            "name": "headline",
+            "type": "richText"
+          },
+          {
+            "rows": 3,
+            "name": "lede",
+            "type": "text"
+          }
+        ],
+        "name": "pageHead",
+        "type": "object"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "projectAmount",
+                "type": "number",
+                "title": "Project total (£)"
+              },
+              {
+                "description": "e.g. \"120 months\"",
+                "name": "term",
+                "type": "string"
+              },
+              {
+                "description": "e.g. \"11.9% APR\"",
+                "name": "apr",
+                "type": "string"
+              },
+              {
+                "description": "e.g. \"£162 / month\"",
+                "name": "monthly",
+                "type": "string"
+              },
+              {
+                "description": "e.g. \"£19,440\"",
+                "name": "totalPayable",
+                "type": "string"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "examples",
+        "type": "array",
+        "title": "Finance examples"
+      },
+      {
+        "of": [
+          {
+            "type": "editorialBlock",
+            "title": "Editorial block"
+          }
+        ],
+        "name": "editorial",
+        "type": "array"
+      },
+      {
+        "description": "FCA disclaimers, lender info, etc.",
+        "name": "legal",
+        "type": "richText",
+        "title": "Regulatory text"
+      },
+      {
+        "of": [
+          {
+            "type": "cta",
+            "title": "Call to action"
+          }
+        ],
+        "name": "ctas",
+        "type": "array"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": true
+        },
+        "name": "seo",
+        "type": "seo"
+      }
+    ],
+    "name": "financePage",
+    "type": "document",
+    "title": "Finance page"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "name": "breadcrumb",
+            "type": "string"
+          },
+          {
+            "name": "label",
+            "type": "string"
+          },
+          {
+            "name": "headline",
+            "type": "richText"
+          },
+          {
+            "rows": 3,
+            "name": "lede",
+            "type": "text"
+          }
+        ],
+        "name": "pageHead",
+        "type": "object"
+      },
+      {
+        "description": "Address + hours can be left blank to inherit from Site Settings.",
+        "fields": [
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "name": "directions",
+            "type": "richText"
+          },
+          {
+            "name": "image",
+            "type": "imageWithCaption"
+          }
+        ],
+        "name": "showroomBlock",
+        "type": "object",
+        "title": "Showroom block"
+      },
+      {
+        "description": "The form behaviour itself (GHL webhook) is wired in code and is not editable here.",
+        "fields": [
+          {
+            "name": "heading",
+            "type": "string"
+          },
+          {
+            "name": "intro",
+            "type": "richText"
+          },
+          {
+            "description": "Shown after the form submits.",
+            "name": "successMessage",
+            "type": "string"
+          }
+        ],
+        "name": "formBlock",
+        "type": "object",
+        "title": "Form block"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": true
+        },
+        "name": "seo",
+        "type": "seo"
+      }
+    ],
+    "name": "contactPage",
+    "type": "document",
+    "title": "Contact page"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "description": "e.g. \"— Journal & FAQ\"",
+            "name": "breadcrumb",
+            "type": "string"
+          },
+          {
+            "description": "e.g. \"Vol. 01\"",
+            "name": "volumeLabel",
+            "type": "string"
+          },
+          {
+            "name": "lastUpdated",
+            "type": "date"
+          },
+          {
+            "name": "headline",
+            "type": "richText"
+          },
+          {
+            "rows": 3,
+            "name": "lede",
+            "type": "text"
+          }
+        ],
+        "name": "intro",
+        "type": "object",
+        "title": "Page intro"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "description": "e.g. \"№ 01\"",
+                "name": "number",
+                "type": "string"
+              },
+              {
+                "name": "title",
+                "type": "string"
+              },
+              {
+                "description": "e.g. \"Reply within 2 working days\"",
+                "name": "meta",
+                "type": "string"
+              },
+              {
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "validation": [
+                          {
+                            "rules": [
+                              {
+                                "flag": "presence",
+                                "constraint": "required"
+                              }
+                            ],
+                            "level": "error"
+                          }
+                        ],
+                        "name": "question",
+                        "type": "string"
+                      },
+                      {
+                        "name": "answer",
+                        "type": "richText"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "faqItem"
+                  }
+                ],
+                "name": "items",
+                "type": "array",
+                "title": "Questions"
+              }
+            ],
+            "type": "object",
+            "name": "faqSection"
+          }
+        ],
+        "name": "sections",
+        "type": "array",
+        "title": "FAQ sections"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": true
+        },
+        "name": "seo",
+        "type": "seo"
+      }
+    ],
+    "name": "faq",
+    "type": "document",
+    "title": "FAQ page"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "name",
+          "maxLength": 80
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Glass Garden Room",
+              "value": "glass-room"
+            },
+            {
+              "title": "Veranda",
+              "value": "veranda"
+            },
+            {
+              "title": "Carport",
+              "value": "carport"
+            }
+          ],
+          "layout": "radio"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "glass-room",
+                  "veranda",
+                  "carport"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "category",
+        "type": "string"
+      },
+      {
+        "description": "e.g. \"№ 01\" — controls ordering within the category.",
+        "name": "catalogueNumber",
+        "type": "string",
+        "title": "Catalogue number"
+      },
+      {
+        "name": "strapline",
+        "type": "string"
+      },
+      {
+        "fields": [
+          {
+            "name": "amount",
+            "type": "number",
+            "title": "Amount (£)"
+          },
+          {
+            "initialValue": "From £",
+            "name": "displayPrefix",
+            "type": "string"
+          }
+        ],
+        "name": "fromPrice",
+        "type": "object",
+        "title": "From price"
+      },
+      {
+        "name": "heroImage",
+        "type": "imageWithCaption"
+      },
+      {
+        "name": "lifestyleGallery",
+        "type": "gallery"
+      },
+      {
+        "name": "moment",
+        "type": "momentBlock",
+        "title": "Atmospheric \"moment\" section"
+      },
+      {
+        "of": [
+          {
+            "type": "editorialBlock",
+            "title": "Editorial block"
+          }
+        ],
+        "name": "editorial",
+        "type": "array",
+        "title": "Editorial blocks"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "name": "value",
+                "type": "string"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "specs",
+        "type": "array",
+        "title": "Specifications"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "features",
+        "type": "array"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "name": "swatch",
+                "type": "imageWithCaption"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "finishOptions",
+        "type": "array",
+        "title": "Finish options"
+      },
+      {
+        "of": [
+          {
+            "type": "cta",
+            "title": "Call to action"
+          }
+        ],
+        "name": "ctas",
+        "type": "array",
+        "title": "Buttons"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": true
+        },
+        "name": "seo",
+        "type": "seo"
+      }
+    ],
+    "name": "product",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "customerName",
+        "type": "string"
+      },
+      {
+        "description": "e.g. \"Solihull\"",
+        "name": "location",
+        "type": "string"
+      },
+      {
+        "to": [
+          {
+            "type": "product"
+          }
+        ],
+        "name": "projectType",
+        "type": "reference",
+        "title": "Product they bought"
+      },
+      {
+        "rows": 4,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "quote",
+        "type": "text"
+      },
+      {
+        "options": {
+          "list": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "layout": "radio",
+          "direction": "horizontal"
+        },
+        "initialValue": 5,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ]
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 5
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "rating",
+        "type": "number"
+      },
+      {
+        "name": "photo",
+        "type": "imageWithCaption"
+      },
+      {
+        "name": "date",
+        "type": "date"
+      },
+      {
+        "initialValue": false,
+        "name": "featured",
+        "type": "boolean",
+        "title": "Feature on home page"
+      }
+    ],
+    "name": "testimonial",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 80
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "description": "e.g. \"Solihull\"",
+        "name": "location",
+        "type": "string"
+      },
+      {
+        "to": [
+          {
+            "type": "product"
+          }
+        ],
+        "name": "projectType",
+        "type": "reference"
+      },
+      {
+        "name": "completedOn",
+        "type": "date"
+      },
+      {
+        "name": "heroImage",
+        "type": "imageWithCaption"
+      },
+      {
+        "of": [
+          {
+            "type": "imageWithCaption",
+            "title": "Image"
+          }
+        ],
+        "name": "gallery",
+        "type": "array"
+      },
+      {
+        "name": "description",
+        "type": "richText"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "name": "value",
+                "type": "string"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "specs",
+        "type": "array"
+      }
+    ],
+    "name": "project",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 80
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "name": "publishedAt",
+        "type": "datetime",
+        "title": "Published date"
+      },
+      {
+        "name": "author",
+        "type": "string"
+      },
+      {
+        "description": "e.g. \"Vol. 01\"",
+        "name": "volumeNumber",
+        "type": "string",
+        "title": "Volume label"
+      },
+      {
+        "name": "heroImage",
+        "type": "imageWithCaption"
+      },
+      {
+        "rows": 3,
+        "description": "Shown on the journal listing page.",
+        "name": "excerpt",
+        "type": "text",
+        "title": "Short summary"
+      },
+      {
+        "name": "body",
+        "type": "richText"
+      },
+      {
+        "of": [
+          {
+            "to": [
+              {
+                "type": "product"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to product"
+          }
+        ],
+        "name": "relatedProducts",
+        "type": "array"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": true
+        },
+        "name": "seo",
+        "type": "seo"
+      }
+    ],
+    "name": "journalPost",
+    "type": "document",
+    "title": "Journal post"
+  }
+]
