@@ -8,24 +8,6 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
-# Astro
-web/.astro/
-web/dist/
-
-# Sanity
-studio/dist/
-studio/.sanity/
-
-# web/public/* are junctions to the legacy asset dirs at repo root.
-# They're a dev-time convenience; the real assets live at root and are committed there.
-# At cutover (when legacy HTML is removed) these become real directories.
-web/public/css/
-web/public/js/
-web/public/images/
-web/public/vidoes/
-web/public/Brand/
-web/public/scolling/
-
 # OS
 .DS_Store
 Thumbs.db
