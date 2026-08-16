@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pergovista Brisa — Bioclimatic Louvred Pergolas | Glass Garden Rooms</title>
+<meta name="description" content="The Pergovista Brisa bioclimatic pergola — a fully motorised aluminium louvred roof with integrated LED lighting, concealed drainage and smart-app control. Supplied and installed across the Midlands by Glass Garden Rooms." />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   Pergovista Brisa — scoped to .pgv so it never touches the
+   Glass Garden Rooms masthead/colophon. Built on Pergovista's
+   own brand: Cormorant Garamond + DM Sans, gold on near-black.
+   ============================================================ */
+.pgv{
+  --ink:#0e0f11;         /* near-black             */
+  --ink-2:#17181b;
+  --body:#3c3d40;        /* body text on light     */
+  --muted:#6b6d72;
+  --gold:#bd9a4e;        /* Pergovista gold        */
+  --gold-lt:#d8bd77;
+  --bg:#ffffff;
+  --soft:#f6f4ef;        /* warm cream             */
+  --line:#e7e3da;
+  --line-dk:#2a2c30;
+  --shadow:0 10px 40px rgba(14,15,17,.14);
+  --radius:4px;
+  font-family:'DM Sans',system-ui,sans-serif;
+  color:var(--body);
+  background:var(--bg);
+  font-size:16px;line-height:1.7;
+}
+.pgv *{box-sizing:border-box;}
+.pgv h1,.pgv h2,.pgv h3{font-family:'Cormorant Garamond',Georgia,serif;color:var(--ink);line-height:1.08;margin:0;font-weight:600;letter-spacing:-.01em;}
+.pgv h4{font-family:'DM Sans',sans-serif;color:var(--ink);margin:0;font-weight:700;}
+.pgv p{margin:0 0 1rem;}
+.pgv strong{font-weight:700;color:var(--ink);}
+.pgv a{color:inherit;}
+.pgv .wrap{max-width:1200px;margin-inline:auto;padding-inline:clamp(20px,5vw,52px);}
+.pgv .eyebrow{font-family:'DM Sans',sans-serif;font-weight:700;letter-spacing:.22em;text-transform:uppercase;font-size:.7rem;color:var(--gold);}
+.pgv .eyebrow::before{display:none;}
+
+/* ---- Pergovista wordmark ---- */
+.pgv .pvmark{display:inline-flex;align-items:center;gap:.6rem;}
+.pgv .pvmark svg{width:30px;height:30px;flex:0 0 auto;}
+.pgv .pvmark .wm{font-family:'DM Sans',sans-serif;font-weight:700;letter-spacing:.14em;font-size:1.02rem;line-height:1;}
+.pgv .pvmark .wm .v{color:var(--gold);}
+.pgv .pvmark .sub{display:block;font-weight:500;letter-spacing:.28em;font-size:.5rem;margin-top:.28rem;opacity:.7;}
+
+/* ---- buttons ---- */
+.pgv .abtn{display:inline-flex;align-items:center;gap:.5rem;background:var(--gold);color:#161310;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.02em;
+  padding:.9rem 1.7rem;border-radius:var(--radius);border:0;cursor:pointer;text-decoration:none;
+  transition:transform .25s,box-shadow .25s,background .25s;}
+.pgv .abtn:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(0,0,0,.25);background:var(--gold-lt);}
+.pgv .abtn-ghost{background:transparent;border:1px solid rgba(255,255,255,.45);color:#fff;}
+.pgv .abtn-ghost:hover{background:#fff;color:var(--ink);border-color:#fff;}
+.pgv .abtn-dark{background:transparent;border:1px solid var(--ink);color:var(--ink);}
+.pgv .abtn-dark:hover{background:var(--ink);color:#fff;}
+
+/* ---- hero ---- */
+.pgv .hero{position:relative;min-height:clamp(560px,86vh,860px);display:flex;align-items:flex-end;
+  color:#fff;overflow:hidden;background:#000;}
+.pgv .hero::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,.15) 40%,rgba(0,0,0,.82) 100%);z-index:1;}
+.pgv .hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0;}
+.pgv .hero .wrap{position:relative;z-index:2;padding-bottom:clamp(44px,7vw,84px);padding-top:120px;}
+.pgv .hero h1{color:#fff;font-size:clamp(2.8rem,7vw,5.6rem);font-weight:600;max-width:16ch;margin:.9rem 0 0;}
+.pgv .hero .tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.2rem,2.4vw,1.7rem);color:var(--gold-lt);margin:.5rem 0 0;}
+.pgv .hero .lead{font-size:1.06rem;max-width:52ch;margin:1.4rem 0 1.9rem;color:rgba(255,255,255,.86);}
+.pgv .hero-cta{display:flex;gap:.9rem;flex-wrap:wrap;}
+.pgv .hero .badge-row{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;margin-bottom:.4rem;}
+.pgv .pill{display:inline-flex;align-items:center;gap:.5rem;border:1px solid rgba(255,255,255,.3);
+  border-radius:100px;padding:.4rem .9rem;font-size:.72rem;font-weight:500;letter-spacing:.04em;color:#fff;}
+.pgv .pill svg{width:15px;height:15px;stroke:var(--gold-lt);fill:none;stroke-width:1.8;}
+
+/* ---- sections ---- */
+.pgv .section{padding:clamp(60px,8vw,110px) 0;}
+.pgv .section.soft{background:var(--soft);}
+.pgv .section.dark{background:var(--ink);color:rgba(255,255,255,.82);}
+.pgv .section.dark h2,.pgv .section.dark h3,.pgv .section.dark h4{color:#fff;}
+.pgv .section.dark .eyebrow{color:var(--gold-lt);}
+.pgv .shead{max-width:64ch;margin:0 auto clamp(38px,5vw,64px);text-align:center;}
+.pgv .shead .eyebrow{display:block;margin-bottom:1rem;}
+.pgv .shead h2{font-size:clamp(2.1rem,4.4vw,3.4rem);}
+.pgv .shead p{margin-top:1.1rem;font-size:1.05rem;color:var(--muted);}
+.pgv .section.dark .shead p{color:rgba(255,255,255,.6);}
+
+/* ---- intro split ---- */
+.pgv .split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,5vw,72px);align-items:center;}
+.pgv .split.flip .split-media{order:2;}
+.pgv .split-media{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);aspect-ratio:4/3;}
+.pgv .split-media img{width:100%;height:100%;object-fit:cover;display:block;}
+.pgv .split h2{font-size:clamp(2rem,3.8vw,3rem);margin-bottom:1.2rem;}
+.pgv .split .eyebrow{display:block;margin-bottom:1rem;}
+.pgv .split p{color:var(--muted);}
+.pgv .section.dark .split p{color:rgba(255,255,255,.72);}
+
+/* ---- feature grid ---- */
+.pgv .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-dk);border:1px solid var(--line-dk);}
+.pgv .feat{background:var(--ink);padding:2.4rem 1.8rem;}
+.pgv .feat svg{width:34px;height:34px;stroke:var(--gold);fill:none;stroke-width:1.5;margin-bottom:1rem;}
+.pgv .feat h4{font-size:1.02rem;margin-bottom:.5rem;letter-spacing:.01em;}
+.pgv .feat p{font-size:.88rem;margin:0;color:rgba(255,255,255,.6);line-height:1.6;}
+
+/* ---- states ---- */
+.pgv .states{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+.pgv .state{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:2.2rem 1.7rem;text-align:center;}
+.pgv .state .glyph{width:60px;height:60px;margin:0 auto 1.2rem;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.pgv .state .glyph svg{width:30px;height:30px;stroke:var(--gold);fill:none;stroke-width:1.4;}
+.pgv .state h3{font-size:1.7rem;margin-bottom:.5rem;}
+.pgv .state p{font-size:.9rem;margin:0;color:var(--muted);}
+
+/* ---- spec table ---- */
+.pgv .specwrap{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(34px,5vw,64px);align-items:start;}
+.pgv table.spec{width:100%;border-collapse:collapse;font-size:.92rem;}
+.pgv table.spec th,.pgv table.spec td{text-align:left;padding:.85rem 0;border-bottom:1px solid var(--line-dk);vertical-align:top;}
+.pgv table.spec th{font-family:'DM Sans',sans-serif;font-weight:500;color:rgba(255,255,255,.55);width:44%;}
+.pgv table.spec td{color:#fff;font-weight:500;}
+.pgv .spec-media{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);aspect-ratio:3/4;}
+.pgv .spec-media img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* ---- price ---- */
+.pgv .price-card{max-width:760px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  padding:clamp(28px,4vw,48px);text-align:center;box-shadow:var(--shadow);}
+.pgv .price-card .amt{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(3rem,6vw,4.4rem);color:var(--ink);line-height:1;}
+.pgv .price-card .amt small{font-size:1.1rem;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:500;}
+.pgv .price-card .note{font-size:.82rem;color:var(--muted);margin:.8rem auto 0;max-width:52ch;}
+.pgv .price-meta{display:flex;justify-content:center;gap:2.2rem;flex-wrap:wrap;margin:1.8rem 0;}
+.pgv .price-meta .pm{font-size:.86rem;color:var(--body);}
+.pgv .price-meta .pm b{display:block;font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--ink);font-weight:600;}
+.pgv .price-cta{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:1.6rem;}
+
+/* ---- gallery ---- */
+.pgv .gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;gap:14px;}
+.pgv .gallery figure{margin:0;overflow:hidden;border-radius:var(--radius);}
+.pgv .gallery img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease;}
+.pgv .gallery figure:hover img{transform:scale(1.05);}
+.pgv .gallery .wide{grid-column:span 2;}
+.pgv .gallery .tall{grid-row:span 2;}
+
+/* ---- colours ---- */
+.pgv .colours{display:flex;justify-content:center;gap:clamp(28px,5vw,64px);flex-wrap:wrap;}
+.pgv .colour{text-align:center;}
+.pgv .colour .dot{width:84px;height:84px;border-radius:50%;margin:0 auto .9rem;box-shadow:var(--shadow);}
+.pgv .colour strong{display:block;font-family:'Cormorant Garamond',serif;font-size:1.35rem;color:var(--ink);}
+.pgv .colour span{font-size:.78rem;color:var(--muted);letter-spacing:.04em;}
+
+/* ---- add-ons ---- */
+.pgv .addons{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.pgv .addon{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem 1.3rem;}
+.pgv .addon svg{width:28px;height:28px;stroke:var(--gold);fill:none;stroke-width:1.5;margin-bottom:.8rem;}
+.pgv .addon h4{font-size:.98rem;margin-bottom:.35rem;}
+.pgv .addon p{font-size:.83rem;margin:0;color:var(--muted);line-height:1.55;}
+
+/* ---- certifications ---- */
+.pgv .certs{display:flex;justify-content:center;gap:clamp(24px,5vw,60px);flex-wrap:wrap;margin-top:1rem;}
+.pgv .cert{text-align:center;font-size:.8rem;letter-spacing:.06em;color:rgba(255,255,255,.7);text-transform:uppercase;}
+.pgv .cert b{display:block;font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold-lt);letter-spacing:0;text-transform:none;margin-bottom:.2rem;}
+
+/* ---- coming soon + CTA ---- */
+.pgv .soon{display:grid;grid-template-columns:auto 1fr;gap:1.3rem;align-items:center;
+  border:1px solid var(--line);border-radius:var(--radius);padding:1.7rem 1.9rem;background:var(--soft);}
+.pgv .soon .tag{font-family:'DM Sans',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  background:var(--ink);color:var(--gold-lt);padding:.45rem .9rem;border-radius:100px;white-space:nowrap;}
+.pgv .soon p{margin:0;font-size:.95rem;color:var(--body);}
+.pgv .cta{background:var(--ink);color:#fff;text-align:center;padding:clamp(64px,8vw,110px) 0;}
+.pgv .cta h2{color:#fff;font-size:clamp(2.2rem,4.6vw,3.6rem);margin-bottom:1.1rem;}
+.pgv .cta p{color:rgba(255,255,255,.72);max-width:56ch;margin:0 auto 2rem;}
+.pgv .cta .pvmark{margin-bottom:2rem;color:#fff;}
+.pgv .cta .pvmark .wm{color:#fff;}
+
+/* ---- responsive ---- */
+@media (max-width:940px){
+  .pgv .split,.pgv .specwrap{grid-template-columns:1fr;}
+  .pgv .split.flip .split-media{order:0;}
+  .pgv .spec-media{aspect-ratio:16/10;}
+  .pgv .feat-grid{grid-template-columns:repeat(2,1fr);}
+  .pgv .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:200px;}
+  .pgv .addons{grid-template-columns:repeat(2,1fr);}
+}
+@media (max-width:560px){
+  .pgv .feat-grid,.pgv .states,.pgv .addons{grid-template-columns:1fr;}
+  .pgv .soon{grid-template-columns:1fr;text-align:center;}
+  .pgv .gallery .wide{grid-column:span 1;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== GLASS GARDEN ROOMS MASTHEAD (unchanged) ===== -->
+<header class="masthead">
+  <div class="masthead-inner">
+    <a class="logo" href="index.html" aria-label="Glass Garden Rooms — home"><img src="Brand/glassgardenroom.co-logo.svg" alt="Glass Garden Rooms" width="180" height="45" /></a>
+    <nav class="primary-nav">
+      <a href="products.html">Products</a><a href="installation.html">Installation</a><a href="finance.html">Finance</a><a href="blog.html">Blog</a><a href="contact.html">Visit</a>
+    </nav>
+    <a class="cta-mini" href="contact.html">Request a quote <span class="arrow">→</span></a>
+    <button class="menu-toggle" aria-label="Open menu"><svg width="20" height="14" viewBox="0 0 20 14"><path d="M0 1h20M0 7h20M0 13h12" stroke="currentColor" stroke-width="1.4" fill="none"/></svg></button>
+  </div>
+</header>
+
+<main class="pgv">
+
+  <!-- HERO -->
+  <section class="hero">
+    <img class="bg" src="images/pergovista-brisa-hero.jpg" alt="Pergovista Brisa bioclimatic louvred pergola glowing at dusk beside a modern home" />
+    <div class="wrap">
+      <div class="badge-row">
+        <span class="pill"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg> Exclusive Midlands partner</span>
+        <span class="eyebrow">Pergovista Brisa · Bioclimatic Pergola</span>
+      </div>
+      <h1>An outdoor room with a roof you control.</h1>
+      <p class="tagline">Refined design. Intelligent control.</p>
+      <p class="lead">The Pergovista <strong style="color:#fff">Brisa</strong> is a fully motorised bioclimatic pergola. Rotate the aluminium roof louvres for sun, dappled shade or full ventilation — then close them flush to keep the rain out. Designed in Portugal, supplied and installed by Glass Garden Rooms.</p>
+      <div class="hero-cta">
+        <a class="abtn" href="contact.html">Request a quote →</a>
+        <a class="abtn abtn-ghost" href="#brisa">Explore the Brisa</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT RANGE OVERVIEW -->
+  <section class="section" id="brisa">
+    <div class="wrap split">
+      <div class="split-body">
+        <span class="eyebrow">Product Overview</span>
+        <h2>One integrated architectural form.</h2>
+        <p>Brisa is designed as a fully integrated pergola system, where structural, mechanical and functional elements are combined within a single, clean architectural form.</p>
+        <p>The adjustable aluminium louvred roof gives precise control over sunlight, shade and ventilation — so your outdoor space responds effortlessly to changing conditions through the day and across the seasons.</p>
+        <p>Constructed from powder-coated 6063-T6 aluminium, Brisa delivers long-term durability with minimal maintenance, while keeping a refined, contemporary appearance.</p>
+      </div>
+      <div class="split-media"><img src="images/pergovista-brisa-lit.jpg" alt="Brisa pergola at dusk with integrated LED lighting over a lounge terrace" /></div>
+    </div>
+  </section>
+
+  <!-- KEY FEATURES (dark) -->
+  <section class="section dark">
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">Key Features</span>
+        <h2>Engineered to be lived under.</h2>
+      </div>
+      <div class="feat-grid">
+        <div class="feat">
+          <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/><path d="M8 5v14M14 5v14"/></svg>
+          <h4>Motorised Louvred Roof</h4>
+          <p>Rotating aluminium blades open up to ~110° for light and airflow, then close flush into a weathertight roof.</p>
+        </div>
+        <div class="feat">
+          <svg viewBox="0 0 24 24"><path d="M12 3v3M5 6l2 2M19 6l-2 2M4 13h16M6 13v6M18 13v6M9 13v6M15 13v6"/></svg>
+          <h4>Integrated LED &amp; RGB</h4>
+          <p>Warm-white LED in every fifth blade, plus a dimmable RGB perimeter strip with remote colour selection.</p>
+        </div>
+        <div class="feat">
+          <svg viewBox="0 0 24 24"><path d="M6 4v9M18 4v9M6 13a6 6 0 0012 0M12 15v5M9 20h6"/></svg>
+          <h4>Concealed Drainage</h4>
+          <p>An integrated perimeter gutter channels rainwater down through the internal posts — nothing on show.</p>
+        </div>
+        <div class="feat">
+          <svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></svg>
+          <h4>Smart App Control</h4>
+          <p>Operate the roof, lighting and sensors by remote or the Tuya Smart app, with optional weather automation.</p>
+        </div>
+        <div class="feat">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M12 5v14M8 12H6M18 12h-2"/></svg>
+          <h4>Sliding Glass &amp; Screens</h4>
+          <p>Add frameless sliding glass doors and zip screens to turn the pergola into an enclosed, all-season room.</p>
+        </div>
+        <div class="feat">
+          <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 0118 0M3 12a9 9 0 0018 0M12 3v18"/></svg>
+          <h4>Built for the Weather</h4>
+          <p>Wind-rated to ~188 km/h, snow loading to 165 kg/m² and an IP67 waterproof motor system.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW THE ROOF WORKS -->
+  <section class="section soft">
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">One roof, three moods</span>
+        <h2>How the louvred roof works.</h2>
+        <p>The blades rotate through the day, so you choose how much sky, sun and shelter you want — no fixed compromise.</p>
+      </div>
+      <div class="states">
+        <div class="state">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div>
+          <h3>Open</h3>
+          <p>Louvres flat and open to the sky — maximum light and free airflow across the space.</p>
+        </div>
+        <div class="state">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M4 5l16 4M4 11l16 4M4 17l16 4"/></svg></div>
+          <h3>Tilted</h3>
+          <p>Angle the blades for cool, dappled shade while the breeze still moves through.</p>
+        </div>
+        <div class="state">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg></div>
+          <h3>Closed</h3>
+          <p>Blades shut flush into a solid, weathertight roof — stay out through a downpour.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHNICAL SPECIFICATION (dark) -->
+  <section class="section dark">
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">Technical Specification</span>
+        <h2>The engineering behind the calm.</h2>
+      </div>
+      <div class="specwrap">
+        <table class="spec">
+          <tr><th>Frame</th><td>6063-T6 architectural aluminium</td></tr>
+          <tr><th>Blade profile</th><td>Flat aluminium blade, 180 × 45 × 1.5 mm</td></tr>
+          <tr><th>Posts</th><td>150 × 150 × 2.2 mm</td></tr>
+          <tr><th>Maximum single bay</th><td>4.0 m wide × 6.0 m projection (multi-bay for larger spans)</td></tr>
+          <tr><th>Standard height</th><td>2.5 m</td></tr>
+          <tr><th>Motor</th><td>Linear actuator · DC 24 V · IP67 · up to 24 m² per motor</td></tr>
+          <tr><th>Lighting</th><td>Warm-white LED every 5th blade + dimmable RGB perimeter strip</td></tr>
+          <tr><th>Wind resistance</th><td>Approx. 188 km/h</td></tr>
+          <tr><th>Snow loading</th><td>Up to 165 kg/m²</td></tr>
+          <tr><th>Surface finish</th><td>AkzoNobel architectural powder coating</td></tr>
+          <tr><th>Installation</th><td>Freestanding · wall-mounted · between existing structures</td></tr>
+        </table>
+        <div class="spec-media"><img src="images/pergovista-brisa-underside.jpg" alt="Underside of the Brisa louvred roof showing integrated LED perimeter lighting" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICE -->
+  <section class="section">
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">Made to Measure</span>
+        <h2>Priced for your garden.</h2>
+        <p>Every Brisa is made to measure. Below is an indicative starting price for the fully-specified motorised model — your exact figure is confirmed at survey.</p>
+      </div>
+      <div class="price-card">
+        <div class="amt">from £3,949 <small>+ VAT</small></div>
+        <div class="price-meta">
+          <div class="pm"><b>Motorised</b> roof, rain sensor &amp; lighting as standard</div>
+          <div class="pm"><b>15 / 10 / 5</b> year structure / coating / motor warranty</div>
+          <div class="pm"><b>Up to 4×6m</b> single bay, multi-bay available</div>
+        </div>
+        <p class="note">Indicative supply price for the smallest bay, including the motorised roof, rain sensor, LED spotlights and RGB perimeter lighting. Delivery, installation and options (glazing, screens, walls) are quoted separately at survey.</p>
+        <div class="price-cta">
+          <a class="abtn abtn-dark" href="contact.html">Request a tailored quote →</a>
+          <a class="abtn abtn-dark" href="tel:02475102899">024 7510 2899</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="section soft">
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">The Brisa in place</span>
+        <h2>Considered from every angle.</h2>
+      </div>
+      <div class="gallery">
+        <figure class="wide tall"><img src="images/pergovista-brisa-pool.jpg" alt="Brisa pergola beside a swimming pool with mountain views" /></figure>
+        <figure><img src="images/pergovista-brisa-wall.jpg" alt="Wall-mounted Brisa pergola against a white rendered house" /></figure>
+        <figure><img src="images/pergovista-brisa-enclosed.jpg" alt="Enclosed Brisa pergola with frameless sliding glass doors" /></figure>
+        <figure class="wide"><img src="images/pergovista-brisa-rooftop.jpg" alt="Brisa pergola furnishing a rooftop city terrace" /></figure>
+        <figure><img src="images/pergovista-brisa-interior.jpg" alt="Interior of an enclosed Brisa pergola looking out to the garden" /></figure>
+        <figure><img src="images/pergovista-brisa-commercial.jpg" alt="Multi-bay Brisa installation at a commercial venue at dusk" /></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINISHES -->
+  <section class="section">
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">Finishes</span>
+        <h2>Powder-coated to last.</h2>
+        <p>Three standard architectural finishes, with bespoke RAL colours available on request.</p>
+      </div>
+      <div class="colours">
+        <div class="colour"><div class="dot" style="background:#383b3e;"></div><strong>Anthracite Grey</strong><span>RAL 7016</span></div>
+        <div class="colour"><div class="dot" style="background:#f4f4f0;border:1px solid var(--line);"></div><strong>Traffic White</strong><span>RAL 9016</span></div>
+        <div class="colour"><div class="dot" style="background:#0b0c0d;"></div><strong>Jet Black</strong><span>RAL 9005</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADD-ONS -->
+  <section class="section soft">
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">Options &amp; Add-Ons</span>
+        <h2>Make it yours.</h2>
+        <p>Specify the Brisa as an open pergola or a fully enclosed, all-season garden room.</p>
+      </div>
+      <div class="addons">
+        <div class="addon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M12 5v14M8 12H6M18 12h-2"/></svg><h4>Frameless Sliding Glass Doors</h4><p>Enclose the space and slide it open again whenever you like.</p></div>
+        <div class="addon"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M4 7h16M4 11h16M4 15h16M4 19h16"/></svg><h4>Zip Screens</h4><p>Remote-controlled side screens for privacy, shade and shelter from wind.</p></div>
+        <div class="addon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 9h16M4 14h16"/></svg><h4>Solid &amp; Slatted Walls</h4><p>Aluminium slatted or solid infill walls for structure and privacy.</p></div>
+        <div class="addon"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 5v14M20 5v14M4 19h16M8 5v14M12 5v14M16 5v14"/></svg><h4>Adjustable Shutter Wall</h4><p>Rotating shutters to fine-tune light and privacy on any elevation.</p></div>
+        <div class="addon"><svg viewBox="0 0 24 24"><path d="M8 3v4M12 3v4M16 3v4M6 9h12l-1 11H7z"/></svg><h4>Infrared Heaters</h4><p>Discreet radiant heat to take the chill off and stretch the season.</p></div>
+        <div class="addon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 5c3 0 5 1 5 3s-4 1-4 4M12 19c-3 0-5-1-5-3s4-1 4-4"/></svg><h4>Ceiling Fan</h4><p>Integrated fan for gentle air movement on still summer evenings.</p></div>
+        <div class="addon"><svg viewBox="0 0 24 24"><path d="M4 14a8 8 0 0116 0M8 18h8M10 21h4"/><path d="M12 3v3"/></svg><h4>Rain &amp; Wind Sensors</h4><p>Automatic roof response — closes for rain, adjusts in high wind.</p></div>
+        <div class="addon"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg><h4>Bespoke RAL Colours</h4><p>Match your home with a custom powder-coat finish on request.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WARRANTY & CERTIFICATION (dark) -->
+  <section class="section dark">
+    <div class="wrap">
+      <div class="shead">
+        <span class="eyebrow">Warranty &amp; Certification</span>
+        <h2>Backed to last.</h2>
+        <p>Independently tested and certified, and covered by a comprehensive manufacturer warranty.</p>
+      </div>
+      <div class="certs">
+        <div class="cert"><b>15 yr</b>Aluminium structure</div>
+        <div class="cert"><b>10 yr</b>Powder coating</div>
+        <div class="cert"><b>5 yr</b>Motor system</div>
+        <div class="cert"><b>TÜV SÜD</b>Attestation of conformity</div>
+        <div class="cert"><b>SGS</b>Certificate of compliance</div>
+        <div class="cert"><b>CE · IP67</b>Certified actuator system</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFIGURATOR SOON -->
+  <section class="section">
+    <div class="wrap">
+      <div class="soon">
+        <span class="tag">Coming soon</span>
+        <p><strong>A dedicated Pergovista configurator is on the way.</strong> Soon you'll be able to size your Brisa, choose the finish, glazing and screens, and get an indicative price online. In the meantime, request a quote and we'll design it around your garden.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="wrap">
+      <span class="pvmark">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path fill="#bd9a4e" d="M20 5l15 8-15 8L5 13z"/><path fill="#8f6f36" d="M5 16l15 8 15-8v6l-15 8-15-8z"/><path fill="#d8bd77" d="M5 24l15 8 15-8v3l-15 8-15-8z"/></svg>
+        <span class="wm">PERGO<span class="v">VISTA</span><span class="sub">DESIGNED IN PORTUGAL</span></span>
+      </span>
+      <h2>See the Brisa in your garden.</h2>
+      <p>We'll measure up, talk through the roof, glazing and screen options, and give you an honest, no-pressure quote. Supplied and installed by our own team across the Midlands.</p>
+      <div class="hero-cta" style="justify-content:center;">
+        <a class="abtn" href="contact.html">Book a free survey →</a>
+        <a class="abtn abtn-ghost" href="tel:02475102899">024 7510 2899</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== GLASS GARDEN ROOMS COLOPHON (unchanged) ===== -->
+<footer class="colophon">
+  <div class="wrap">
+    <div class="colophon-grid">
+      <div class="colophon-brand"><p class="display">Bring the<br/><em>outdoors</em> in.</p><p>A family of designers, makers and installers based in Nuneaton — building quiet, well-made aluminium architecture across the Midlands and beyond.</p></div>
+      <div><h4>Catalogue</h4><ul class="colophon-list"><li><a href="verandas.html">Verandas</a></li><li><a href="premium-verandas.html">Veranda Collection</a></li><li><a href="pergovista.html">Pergovista Pergolas</a></li><li><a href="garden-rooms.html">Garden Rooms</a></li><li><a href="carports.html">Carports</a></li><li><a href="products.html">All Products</a></li><li><a href="assets/glass-garden-rooms-brochure.pdf" download>Brochure (PDF)</a></li></ul></div>
+      <div><h4>Service</h4><ul class="colophon-list"><li><a href="installation.html">Installation</a></li><li><a href="finance.html">Finance</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div><h4>Find us</h4><ul class="colophon-list"><li><a href="tel:02475102899">024 7510 2899</a></li><li><a href="https://wa.me/447398224061">WhatsApp 07398 224061</a></li><li><a href="mailto:info@glassgardenrooms.net">info@glassgardenrooms.net</a></li><li>Unit 25, Centenary Business Centre,<br/>Hammond Close, Nuneaton, CV11 6RY</li></ul></div>
+    </div>
+    <div class="colophon-bottom"><span>© 2026 Glass Garden Rooms Ltd · Co. No. 15487442</span><span>Introducer regulated by the FCA · Finance via Ideal4Finance (FRN 703401)</span></div>
+  </div>
+</footer>
+
+<a class="float-wa" href="https://wa.me/447398224061" aria-label="WhatsApp us"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.768.967-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+<script src="js/main.js"></script>
+</body>
+</html>
