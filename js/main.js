@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const principal = +amount.value;
       const months = +term.value;
       // Representative APR table — illustrative only
-      const aprTable = { 12: 0.0, 24: 9.9, 36: 11.9, 48: 12.9, 60: 13.9 };
+      const aprTable = { 12: 0.0, 24: 15.9, 36: 15.9, 48: 15.9, 60: 15.9 };
       const apr = aprTable[months] ?? 11.9;
       const r = (apr / 100) / 12;
       let monthly;
