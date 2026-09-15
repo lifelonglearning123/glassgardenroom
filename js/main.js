@@ -133,6 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!quoteForm.reportValidity()) return;
 
       const fd = new FormData(quoteForm);
+
+      // anti-bot honeypot: if the hidden field is filled it's a bot -> drop silently
+      if (((fd.get('company') || '') + '').trim() !== '') {
+        quoteForm.reset();
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Sent \u2014 we'll be in touch";
+        showStatus("Thank you \u2014 your enquiry is with us. We'll reply within 2 working days.");
+        return;
+      }
       const payload = {
         name:     fd.get('name'),
         phone:    fd.get('phone'),

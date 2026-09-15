@@ -38,6 +38,11 @@
   <div class="editorial">
     <!-- Contact / Quote form -->
     <form class="reveal" id="quote-form" novalidate>
+      <!-- anti-bot honeypot: off-screen, real users never see or fill it -->
+      <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" tabindex="-1">
+        <label for="f-company">Company (leave this field empty)</label>
+        <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+      </div>
       <span class="eyebrow">Request a quote</span>
       <div class="form-grid" style="margin-top: var(--s-5);">
         <div class="field">
