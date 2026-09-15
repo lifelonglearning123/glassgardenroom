@@ -121,6 +121,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitBtn = quoteForm.querySelector('button[type="submit"]');
     const originalBtnHTML = submitBtn ? submitBtn.innerHTML : '';
 
+    // custom captcha (simple maths) — deters bots, no third-party service
+    const captchaQ = document.getElementById('captcha-q');
+    const captchaInput = document.getElementById('f-captcha');
+    let captchaAnswer = 0;
+    function newCaptcha() {
+      const a = 1 + Math.floor(Math.random() * 9);
+      const b = 1 + Math.floor(Math.random() * 9);
+      captchaAnswer = a + b;
+      if (captchaQ) captchaQ.textContent = 'what is ' + a + ' + ' + b + '?';
+      if (captchaInput) captchaInput.value = '';
+    }
+    newCaptcha();
+
     const showStatus = (msg, isError = false) => {
       if (!statusEl) return;
       statusEl.textContent = msg;
@@ -142,6 +155,15 @@ document.addEventListener('DOMContentLoaded', () => {
         showStatus("Thank you \u2014 your enquiry is with us. We'll reply within 2 working days.");
         return;
       }
+      // custom captcha check
+      if (parseInt(((fd.get('captcha') || '') + '').trim(), 10) !== captchaAnswer) {
+        showStatus("Please answer the quick check correctly to continue.", true);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHTML;
+        newCaptcha();
+        return;
+      }
+
       const payload = {
         name:     fd.get('name'),
         phone:    fd.get('phone'),

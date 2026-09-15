@@ -91,6 +91,10 @@
           <label for="f-message">Tell us about your space</label>
           <textarea id="f-message" name="message" placeholder="Width, projection, wall material, anything you'd like us to know..." required></textarea>
         </div>
+        <div class="field field-full">
+          <label for="f-captcha">Quick check — <span id="captcha-q">what is 3 + 4?</span></label>
+          <input id="f-captcha" name="captcha" type="text" inputmode="numeric" autocomplete="off" required />
+        </div>
         <div class="field-full">
           <p id="quote-status" class="form-status" role="status" aria-live="polite" hidden></p>
           <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
