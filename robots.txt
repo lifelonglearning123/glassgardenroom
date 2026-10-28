@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /blog/_template.html
+
+Sitemap: https://www.glassgardenrooms.net/sitemap.xml
