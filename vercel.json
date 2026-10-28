@@ -1,18 +1,9 @@
 {
   "redirects": [
-    { "source": "/web/dist", "destination": "/", "permanent": true },
-    { "source": "/web/dist/index.html", "destination": "/", "permanent": true },
-    { "source": "/web/dist/verandas/:rest*", "destination": "/verandas.html", "permanent": true },
-    { "source": "/web/dist/garden-rooms/:rest*", "destination": "/garden-rooms.html", "permanent": true },
-    { "source": "/web/dist/carports/:rest*", "destination": "/carports.html", "permanent": true },
-    { "source": "/web/dist/products/:rest*", "destination": "/products.html", "permanent": true },
-    { "source": "/web/dist/installation/:rest*", "destination": "/installation.html", "permanent": true },
-    { "source": "/web/dist/finance/:rest*", "destination": "/finance.html", "permanent": true },
-    { "source": "/web/dist/faq/:rest*", "destination": "/faq.html", "permanent": true },
-    { "source": "/web/dist/contact/:rest*", "destination": "/contact.html", "permanent": true },
-    { "source": "/web/dist/journal/:rest*", "destination": "/blog.html", "permanent": true },
-    { "source": "/web/:rest*", "destination": "/", "permanent": true },
-    { "source": "/studio/:rest*", "destination": "/", "permanent": true }
+    { "source": "/web/dist/(verandas|garden-rooms|carports|products|installation|finance|faq|contact)(/.*)?", "destination": "/$1.html", "permanent": true },
+    { "source": "/web/dist/journal(/.*)?", "destination": "/blog.html", "permanent": true },
+    { "source": "/web(/.*)?", "destination": "/", "permanent": true },
+    { "source": "/studio(/.*)?", "destination": "/", "permanent": true }
   ],
   "headers": [
     {
