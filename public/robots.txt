@@ -1,4 +1,5 @@
 User-agent: *
 Disallow: /blog/_template.html
+Disallow: /quotes
 
 Sitemap: https://www.glassgardenrooms.net/sitemap.xml

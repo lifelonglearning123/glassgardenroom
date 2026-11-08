@@ -1,14 +1,36 @@
 {
+  "framework": "nextjs",
   "redirects": [
-    { "source": "/web/dist/(verandas|garden-rooms|carports|products|installation|finance|faq|contact)(/.*)?", "destination": "/$1.html", "permanent": true },
-    { "source": "/web/dist/journal(/.*)?", "destination": "/blog.html", "permanent": true },
-    { "source": "/web(/.*)?", "destination": "/", "permanent": true },
-    { "source": "/studio(/.*)?", "destination": "/", "permanent": true }
+    {
+      "source": "/web/dist/(verandas|garden-rooms|carports|products|installation|finance|faq|contact)(/.*)?",
+      "destination": "/$1.html",
+      "permanent": true
+    },
+    {
+      "source": "/web/dist/journal(/.*)?",
+      "destination": "/blog.html",
+      "permanent": true
+    },
+    {
+      "source": "/web(/.*)?",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/studio(/.*)?",
+      "destination": "/",
+      "permanent": true
+    }
   ],
   "headers": [
     {
       "source": "/blog/_template.html",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     }
   ]
 }

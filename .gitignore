@@ -20,3 +20,17 @@ recon/
 .vscode/
 .idea/
 *.swp
+
+# Next.js app (quotes)
+.next/
+next-env.d.ts
+*.tsbuildinfo
+data/
+public/uploads/
+.vercel
+
+# Local reference material (not part of the site)
+/Screen Recording*.mp4
+
+.vercel
+.env*
