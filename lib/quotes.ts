@@ -70,7 +70,10 @@ export async function reviseQuote(source: Quote): Promise<Quote> {
     updatedAt: now,
     sentAt: undefined,
     viewedAt: undefined,
+    lastViewedAt: undefined,
+    viewCount: 0,
     acceptedAt: undefined,
+    ghl: { opportunityId: source.ghl.opportunityId },
     acceptedBy: undefined,
     history: [{ at: now, text: `Revision of quote ${source.number}${source.revision ? '-R' + source.revision : ''}` }],
   };

@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server';
-import { contactToClient, ghlConfigured, searchContacts } from '@/lib/ghl';
+import { contactToClient, crmConnected, searchContacts } from '@/lib/crm';
 
-/** Search GoHighLevel contacts by name, email or phone. */
+/** Search Nexus Portal contacts by name, email or phone. */
 export async function GET(req: Request) {
-  if (!ghlConfigured()) return NextResponse.json({ error: 'GoHighLevel is not connected' }, { status: 400 });
+  if (!(await crmConnected())) {
+    return NextResponse.json({ error: 'Nexus Portal is not connected. Connect it in Settings.' }, { status: 400 });
+  }
   const q = (new URL(req.url).searchParams.get('q') ?? '').trim().slice(0, 75);
   if (q.length < 2) return NextResponse.json({ results: [] });
   try {

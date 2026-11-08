@@ -150,7 +150,7 @@ textarea { resize: vertical; }
 .section-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
 .section-head h2 { margin: 0; }
 
-.ghl-search { margin-top: 1rem; position: relative; }
+.crm-search { margin-top: 1rem; position: relative; }
 .results { list-style: none; margin: 0.4rem 0 0; padding: 0; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
 .results button { display: flex; flex-direction: column; align-items: flex-start; width: 100%; text-align: left; padding: 0.6rem 0.8rem; border: 0; background: #fff; font: inherit; cursor: pointer; border-bottom: 1px solid var(--line-soft); }
 .results button:hover { background: var(--bone-soft); }
@@ -230,3 +230,8 @@ textarea { resize: vertical; }
   .money { width: 120px; }
   .price-row { flex-wrap: wrap; }
 }
+
+/* ---------- Sharing & tracking ---------- */
+.share-tabs { align-self: flex-start; }
+.modal-actions.end { justify-content: flex-end; border-top: 1px solid var(--line-soft); padding-top: 0.8rem; }
+.tracking { margin-bottom: 1.2rem; }

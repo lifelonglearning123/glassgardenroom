@@ -49,6 +49,8 @@ export type Quote = {
   updatedAt: string;
   sentAt?: string;
   viewedAt?: string;
+  lastViewedAt?: string;
+  viewCount?: number;
   acceptedAt?: string;
   acceptedBy?: string;
   preparedBy: string;
@@ -57,7 +59,7 @@ export type Quote = {
   spec: Spec;
   pricing: Pricing;
   photoIds: string[];
-  ghl: { opportunityId?: string };
+  ghl: { opportunityId?: string; lastOpenNoteAt?: string };
   history: { at: string; text: string }[];
 };
 

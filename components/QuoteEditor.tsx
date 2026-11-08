@@ -37,16 +37,15 @@ const editable = (q: Quote) =>
 export default function QuoteEditor({
   initial,
   photos,
-  ghlEnabled,
+  crmEnabled,
 }: {
   initial: Quote;
   photos: Photo[];
-  ghlEnabled: boolean;
+  crmEnabled: boolean;
 }) {
   const [q, setQ] = useState<Quote>(initial);
   const [saveState, setSaveState] = useState<SaveState>('saved');
   const [showSend, setShowSend] = useState(false);
-  const [copied, setCopied] = useState(false);
   const lastSaved = useRef(editable(initial));
   const payload = editable(q);
 
@@ -103,16 +102,14 @@ export default function QuoteEditor({
   const t = totals(q.pricing);
   const link = typeof window === 'undefined' ? `/proposal/${q.token}` : `${window.location.origin}/proposal/${q.token}`;
 
-  const copyLink = async () => {
-    await save(payload);
-    await navigator.clipboard.writeText(link);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   const preview = async () => {
     await save(payload);
     window.open(`/proposal/${q.token}`, '_blank');
+  };
+
+  const downloadPdf = async () => {
+    await save(payload);
+    window.open(`/proposal/${q.token}?print=1`, '_blank');
   };
 
   return (
@@ -129,16 +126,17 @@ export default function QuoteEditor({
             {{ saved: 'All changes saved', saving: 'Saving…', unsaved: 'Unsaved changes', error: 'Could not save, retrying on next change' }[saveState]}
           </span>
           <button className="btn ghost" onClick={preview}>Preview</button>
-          <button className="btn ghost" onClick={copyLink}>{copied ? 'Link copied' : 'Copy client link'}</button>
+          <button className="btn ghost" onClick={downloadPdf}>Download PDF</button>
           <button className="btn primary" onClick={async () => { await save(payload); setShowSend(true); }}>
-            {ghlEnabled ? 'Send via GoHighLevel' : 'Send'}
+            Give quote to client
           </button>
         </div>
       </div>
 
       <div className="editor-grid">
         <div className="editor-main">
-          <ClientSection client={q.client} setClient={setClient} ghlEnabled={ghlEnabled} />
+          <TrackingBanner quote={q} crmEnabled={crmEnabled} />
+          <ClientSection client={q.client} setClient={setClient} crmEnabled={crmEnabled} />
 
           <section className="card">
             <h2>Project</h2>
@@ -228,7 +226,7 @@ export default function QuoteEditor({
       {showSend && (
         <SendDialog
           quote={q}
-          ghlEnabled={ghlEnabled}
+          crmEnabled={crmEnabled}
           link={link}
           onClose={() => setShowSend(false)}
           onSent={(updated) => {
@@ -291,11 +289,11 @@ function Money({ value, onChange, label }: { value: number; onChange: (n: number
 function ClientSection({
   client,
   setClient,
-  ghlEnabled,
+  crmEnabled,
 }: {
   client: Client;
   setClient: (p: Partial<Client>) => void;
-  ghlEnabled: boolean;
+  crmEnabled: boolean;
 }) {
   const [term, setTerm] = useState('');
   const [results, setResults] = useState<Client[]>([]);
@@ -303,7 +301,7 @@ function ClientSection({
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!ghlEnabled || term.trim().length < 2) {
+    if (!crmEnabled || term.trim().length < 2) {
       setResults([]);
       return;
     }
@@ -312,7 +310,7 @@ function ClientSection({
       setBusy(true);
       setError('');
       try {
-        const res = await fetch(`/api/ghl/contacts?q=${encodeURIComponent(term.trim())}`, { signal: ctrl.signal });
+        const res = await fetch(`/api/crm/contacts?q=${encodeURIComponent(term.trim())}`, { signal: ctrl.signal });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Search failed');
         setResults(data.results);
@@ -326,7 +324,7 @@ function ClientSection({
       clearTimeout(timer);
       ctrl.abort();
     };
-  }, [term, ghlEnabled]);
+  }, [term, crmEnabled]);
 
   return (
     <section className="card">
@@ -334,18 +332,18 @@ function ClientSection({
         <h2>Client</h2>
         {client.ghlContactId && (
           <span className="pill ok">
-            Linked to GoHighLevel
+            Linked to Nexus Portal
             <button type="button" className="link small" onClick={() => setClient({ ghlContactId: undefined })}>unlink</button>
           </span>
         )}
       </div>
 
-      {ghlEnabled ? (
-        <div className="ghl-search">
+      {crmEnabled ? (
+        <div className="crm-search">
           <input
             value={term}
             onChange={(e) => setTerm(e.target.value)}
-            placeholder="Search GoHighLevel by name, email or phone…"
+            placeholder="Load a client from Nexus Portal: search by name, email or phone…"
           />
           {busy && <span className="muted small">Searching…</span>}
           {error && <p className="alert error small">{error}</p>}
@@ -369,11 +367,13 @@ function ClientSection({
             </ul>
           )}
           {!busy && term.trim().length >= 2 && results.length === 0 && !error && (
-            <p className="muted small">No matching contacts. Type the details below and the contact will be created in GoHighLevel when you send.</p>
+            <p className="muted small">No matching contacts. Type the details below and the contact will be created in Nexus Portal when you give them the quote.</p>
           )}
         </div>
       ) : (
-        <p className="muted small">GoHighLevel is not connected, so type the client details in.</p>
+        <p className="muted small">
+          Type the client details in, or <Link href="/quotes/settings#nexus">connect Nexus Portal</Link> to load clients from your contacts.
+        </p>
       )}
 
       <div className="form-grid">
@@ -521,95 +521,210 @@ function PhotoSection({
   );
 }
 
+function timeAgo(iso: string): string {
+  const mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins} min ago`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return `${hrs} hour${hrs === 1 ? '' : 's'} ago`;
+  const days = Math.round(hrs / 24);
+  return days < 14 ? `${days} day${days === 1 ? '' : 's'} ago` : new Date(iso).toLocaleDateString('en-GB');
+}
+
+/** Shows whether the client has opened their proposal link. */
+function TrackingBanner({ quote: q, crmEnabled }: { quote: Quote; crmEnabled: boolean }) {
+  if (q.status === 'draft') return null;
+  const synced = crmEnabled && q.client.ghlContactId ? ' Also logged on the contact in Nexus Portal.' : '';
+  if (q.status === 'accepted') {
+    return (
+      <div className="alert ok tracking">
+        <strong>Accepted</strong> by {q.acceptedBy} {q.acceptedAt && timeAgo(q.acceptedAt)}.{synced}
+      </div>
+    );
+  }
+  if (q.viewedAt) {
+    const n = q.viewCount ?? 1;
+    return (
+      <div className="alert ok tracking">
+        <strong>Opened by the client {n} time{n === 1 ? '' : 's'}.</strong> First opened {timeAgo(q.viewedAt)}
+        {q.lastViewedAt && q.lastViewedAt !== q.viewedAt ? `, last opened ${timeAgo(q.lastViewedAt)}` : ''}.{synced}
+      </div>
+    );
+  }
+  return (
+    <div className="alert warn tracking">
+      <strong>Not opened yet.</strong> Given to the client {q.sentAt && timeAgo(q.sentAt)}. You&apos;ll see here when they open the link.
+    </div>
+  );
+}
+
+type ShareResult = { quote: Quote; link: string; warnings: string[] };
+
+/** Three ways to give the quote: tracked link, email from Nexus Portal, or PDF download. */
 function SendDialog({
   quote,
-  ghlEnabled,
+  crmEnabled,
   link,
   onClose,
   onSent,
 }: {
   quote: Quote;
-  ghlEnabled: boolean;
+  crmEnabled: boolean;
   link: string;
   onClose: () => void;
   onSent: (q: Quote) => void;
 }) {
+  const [mode, setMode] = useState<'link' | 'email' | 'pdf'>('link');
   const [subject, setSubject] = useState(defaultEmailSubject(quote));
   const [message, setMessage] = useState(defaultEmailMessage(quote));
-  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [done, setDone] = useState<'' | 'link' | 'email'>('');
   const [warnings, setWarnings] = useState<string[]>([]);
+  const [copied, setCopied] = useState(false);
 
-  const send = async () => {
-    setState('sending');
+  const share = async (how: 'link' | 'email'): Promise<ShareResult | null> => {
+    setBusy(true);
     setError('');
     try {
-      const res = await fetch(`/api/quotes/${quote.id}/send`, {
+      const res = await fetch(`/api/quotes/${quote.id}/share`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subject, message }),
+        body: JSON.stringify({ how, subject, message }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Sending failed');
+      if (!res.ok) throw new Error(data.error || 'Something went wrong');
       setWarnings(data.warnings ?? []);
       onSent(data.quote);
-      setState('sent');
+      return data;
     } catch (e) {
       setError((e as Error).message);
-      setState('error');
+      return null;
+    } finally {
+      setBusy(false);
     }
   };
+
+  const copyLink = async () => {
+    const r = await share('link');
+    if (!r) return;
+    await navigator.clipboard.writeText(r.link).catch(() => undefined);
+    setCopied(true);
+    setDone('link');
+  };
+
+  const firstName = quote.client.name.split(' ')[0] || '';
+  const whatsappText = encodeURIComponent(`Hi ${firstName}, here is your Glass Garden Rooms proposal: ${link}`);
+  const whatsappNumber = quote.client.phone.replace(/\D/g, '').replace(/^0/, '44');
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal card" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
-        <h2>Send quote {quoteRef(quote)}</h2>
-        {state === 'sent' ? (
-          <>
-            <p className="alert ok">
-              Sent to {quote.client.email}. It is logged on the client&apos;s GoHighLevel contact with the tag “quote-sent”.
-            </p>
-            {warnings.length > 0 && (
-              <div className="alert warn small">
-                The email went out, but some GoHighLevel updates failed:
-                <ul>{warnings.map((w, i) => <li key={i}>{w}</li>)}</ul>
-              </div>
-            )}
-            <button className="btn primary" onClick={onClose}>Done</button>
-          </>
-        ) : !ghlEnabled ? (
-          <>
-            <p>GoHighLevel is not connected yet, so the app can&apos;t email the client directly. Copy this link into your own email instead:</p>
-            <input readOnly value={link} onFocus={(e) => e.target.select()} />
-            <div className="modal-actions">
-              <button className="btn" onClick={() => navigator.clipboard.writeText(link)}>Copy link</button>
-              <button className="btn ghost" onClick={onClose}>Close</button>
-            </div>
-          </>
-        ) : (
+        <h2>Give quote {quoteRef(quote)} to {quote.client.name || 'the client'}</h2>
+
+        <div className="segmented share-tabs">
+          <button type="button" className={mode === 'link' ? 'active' : ''} onClick={() => setMode('link')}>Tracked link</button>
+          <button type="button" className={mode === 'email' ? 'active' : ''} onClick={() => setMode('email')}>Email</button>
+          <button type="button" className={mode === 'pdf' ? 'active' : ''} onClick={() => setMode('pdf')}>Download PDF</button>
+        </div>
+
+        {mode === 'link' && (
           <>
             <p className="muted small">
-              To: <strong>{quote.client.name || 'no name'}</strong> &lt;{quote.client.email || 'no email'}&gt;
-              {!quote.client.ghlContactId && ' (a new GoHighLevel contact will be created)'}
+              Send this link by WhatsApp, text or your own email. You will see when the client opens it
+              {crmEnabled ? ', and it is logged on their contact in Nexus Portal' : ''}. From the link they can also
+              download the PDF and accept online.
             </p>
-            <label className="field">
-              <span>Subject</span>
-              <input value={subject} onChange={(e) => setSubject(e.target.value)} />
-            </label>
-            <label className="field">
-              <span>Message</span>
-              <textarea rows={10} value={message} onChange={(e) => setMessage(e.target.value)} />
-            </label>
-            <p className="muted small">A “View your proposal” button and the quote total are added under your message.</p>
-            {error && <p className="alert error">{error}</p>}
+            <input readOnly value={link} onFocus={(e) => e.target.select()} />
+            {done === 'link' && (
+              <p className="alert ok small">
+                {copied ? 'Link copied. ' : ''}The quote is marked as given to the client and opens are now tracked.
+              </p>
+            )}
             <div className="modal-actions">
-              <button className="btn primary" onClick={send} disabled={state === 'sending'}>
-                {state === 'sending' ? 'Sending…' : 'Send email'}
+              <button className="btn primary" onClick={copyLink} disabled={busy}>
+                {busy ? 'Saving…' : copied ? 'Copied' : 'Copy tracked link'}
               </button>
-              <button className="btn ghost" onClick={onClose}>Cancel</button>
+              {whatsappNumber && (
+                <a
+                  className="btn ghost"
+                  href={`https://wa.me/${whatsappNumber}?text=${whatsappText}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => {
+                    void share('link').then((r) => r && setDone('link'));
+                  }}
+                >
+                  Send by WhatsApp
+                </a>
+              )}
             </div>
           </>
         )}
+
+        {mode === 'email' &&
+          (!crmEnabled ? (
+            <p className="alert warn">
+              To email quotes from here, <Link href="/quotes/settings#nexus">connect Nexus Portal</Link> in Settings.
+              Until then, put the tracked link in your own email.
+            </p>
+          ) : done === 'email' ? (
+            <p className="alert ok">
+              Emailed to {quote.client.email} from Nexus Portal. It shows in the client&apos;s conversation, and opens are tracked.
+            </p>
+          ) : (
+            <>
+              <p className="muted small">
+                To: <strong>{quote.client.name || 'no name'}</strong> &lt;{quote.client.email || 'no email'}&gt;
+                {!quote.client.ghlContactId && ' (a new contact will be created in Nexus Portal)'}
+              </p>
+              <label className="field">
+                <span>Subject</span>
+                <input value={subject} onChange={(e) => setSubject(e.target.value)} />
+              </label>
+              <label className="field">
+                <span>Message</span>
+                <textarea rows={9} value={message} onChange={(e) => setMessage(e.target.value)} />
+              </label>
+              <p className="muted small">A “View your proposal” button with the tracked link and the quote total are added under your message.</p>
+              <div className="modal-actions">
+                <button
+                  className="btn primary"
+                  disabled={busy}
+                  onClick={async () => {
+                    if (await share('email')) setDone('email');
+                  }}
+                >
+                  {busy ? 'Sending…' : 'Send email'}
+                </button>
+              </div>
+            </>
+          ))}
+
+        {mode === 'pdf' && (
+          <>
+            <p className="muted small">
+              Opens the proposal with your browser&apos;s print window. Choose <strong>Save as PDF</strong> as the printer.
+              A PDF can be attached anywhere, but you cannot see when the client opens it, so use the tracked link where you can.
+            </p>
+            <div className="modal-actions">
+              <button className="btn primary" onClick={() => window.open(`/proposal/${quote.token}?print=1`, '_blank')}>
+                Download PDF
+              </button>
+            </div>
+          </>
+        )}
+
+        {error && <p className="alert error">{error}</p>}
+        {warnings.length > 0 && (
+          <div className="alert warn small">
+            Done, but some Nexus Portal updates failed:
+            <ul>{warnings.map((w, i) => <li key={i}>{w}</li>)}</ul>
+          </div>
+        )}
+        <div className="modal-actions end">
+          <button className="btn ghost" onClick={onClose}>Close</button>
+        </div>
       </div>
     </div>
   );

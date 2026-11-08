@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { logout } from '../actions';
 import { requireSession } from '@/lib/users';
-import { ghlConfigured } from '@/lib/ghl';
+import { crmConnected } from '@/lib/crm';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const session = await requireSession();
+  const connected = await crmConnected();
   return (
     <>
       <header className="topbar">
@@ -20,9 +21,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <Link href="/quotes/settings">Settings</Link>
         </nav>
         <div className="topbar-right">
-          <span className={`pill ${ghlConfigured() ? 'ok' : 'warn'}`}>
-            {ghlConfigured() ? 'GoHighLevel connected' : 'GoHighLevel not connected'}
-          </span>
+          <Link href="/quotes/settings#nexus" className={`pill ${connected ? 'ok' : 'warn'}`}>
+            {connected ? 'Nexus Portal connected' : 'Nexus Portal not connected'}
+          </Link>
           <span className="muted small">{session.name}</span>
           <form action={logout}>
             <button className="btn ghost small" type="submit">Sign out</button>

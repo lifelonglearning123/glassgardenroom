@@ -15,6 +15,7 @@ import {
 } from '@/lib/users';
 import * as store from '@/lib/store';
 import { createQuote, deleteQuote, duplicateQuote, getQuote, reviseQuote } from '@/lib/quotes';
+import { disconnectCrm, getCrmConfig, saveCrmConnection, saveCrmPipeline, testConnection } from '@/lib/crm';
 
 function safeNext(next: FormDataEntryValue | null): string {
   const n = typeof next === 'string' ? next : '';
@@ -112,4 +113,44 @@ export async function removeUser(formData: FormData) {
   if ((await listUsers()).length <= 1) redirect('/quotes/settings?msg=last-user');
   await store.remove('users', id);
   redirect('/quotes/settings?msg=user-removed');
+}
+
+// ---------- Nexus Portal connection (Settings) ----------
+
+export async function connectCrm(formData: FormData) {
+  await requireSession();
+  const token = String(formData.get('token') ?? '').trim();
+  const locationId = String(formData.get('locationId') ?? '').trim();
+  const emailFrom = String(formData.get('emailFrom') ?? '').trim();
+  const existing = await getCrmConfig();
+  const tokenToTest = token || existing?.token || '';
+  if (!tokenToTest || !locationId) redirect('/quotes/settings?msg=crm-missing#nexus');
+  try {
+    await testConnection(tokenToTest, locationId);
+  } catch (e) {
+    redirect(`/quotes/settings?msg=crm-failed&detail=${encodeURIComponent((e as Error).message).slice(0, 400)}#nexus`);
+  }
+  await saveCrmConnection(token || null, locationId, emailFrom);
+  redirect('/quotes/settings?msg=crm-connected#nexus');
+}
+
+export async function saveCrmStages(formData: FormData) {
+  await requireSession();
+  const sent = String(formData.get('stageSent') ?? '');
+  const accepted = String(formData.get('stageAccepted') ?? '');
+  if (!sent) {
+    await saveCrmPipeline(undefined, undefined, undefined);
+    redirect('/quotes/settings?msg=crm-stages-saved#nexus');
+  }
+  const [pipelineId, stageSentId] = sent.split(':');
+  const [acceptedPipeline, stageAcceptedId] = accepted ? accepted.split(':') : [pipelineId, undefined];
+  if (acceptedPipeline !== pipelineId) redirect('/quotes/settings?msg=crm-stage-mismatch#nexus');
+  await saveCrmPipeline(pipelineId, stageSentId, stageAcceptedId);
+  redirect('/quotes/settings?msg=crm-stages-saved#nexus');
+}
+
+export async function disconnectCrmAction() {
+  await requireSession();
+  await disconnectCrm();
+  redirect('/quotes/settings?msg=crm-disconnected#nexus');
 }
