@@ -7,7 +7,7 @@ export function defaultEmailMessage(q: Quote): string {
   const first = q.client.name.split(' ')[0] || 'there';
   return (
     `Hi ${first},\n\n` +
-    `Thank you for your time. As promised, here is your personalised proposal for your ${q.spec.productName.toLowerCase()}, ` +
+    `Thank you for your time. As promised, here is your personalised proposal for your ${q.spec.productName}, ` +
     `including photos of similar projects we have installed.\n\n` +
     `If you are happy with everything, you can accept the proposal online or simply reply to this email ` +
     `and we will book your technical site survey.\n\n` +
@@ -28,7 +28,7 @@ export function emailHtml(q: Quote, message: string, link: string, appUrl: strin
   return `<!doctype html><html><body style="margin:0;background:#F4EFE6;font-family:Arial,Helvetica,sans-serif;color:#181612">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F4EFE6;padding:24px 0"><tr><td align="center">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:8px;overflow:hidden">
-<tr><td style="background:#ffffff;padding:22px 28px 18px;border-bottom:3px solid #3F5039"><img src="${appUrl}/Brand/ggr-logo-email.png" alt="Glass Garden Rooms" height="40" style="height:40px"></td></tr>
+<tr><td style="background:#ffffff;padding:22px 28px 18px;border-bottom:3px solid #3F5039"><img src="${appUrl}/Brand/ggr-logo-email-2x.png" alt="Glass Garden Rooms" width="255" height="40" style="display:block;width:255px;height:40px;border:0"></td></tr>
 <tr><td style="padding:28px 28px 8px;font-size:15px;line-height:1.6">${paragraphs}</td></tr>
 <tr><td style="padding:8px 28px 4px">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FAF7F1;border:1px solid #E8DFCD;border-radius:6px">
@@ -40,7 +40,15 @@ export function emailHtml(q: Quote, message: string, link: string, appUrl: strin
   </td></tr></table>
 </td></tr>
 <tr><td align="center" style="padding:22px 28px 30px">
-  <a href="${link}" style="display:inline-block;background:#3F5039;color:#ffffff;text-decoration:none;padding:14px 28px;border-radius:4px;font-weight:bold;font-size:15px">View your proposal</a>
+  <!-- Email-safe button: the colour sits on the table cell and the text colour on a span,
+       so mail apps can't repaint it with their own (purple/blue) link colours. -->
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto">
+    <tr>
+      <td align="center" bgcolor="#3F5039" style="background:#3F5039;border-radius:6px;mso-padding-alt:14px 32px">
+        <a href="${link}" target="_blank" style="display:inline-block;padding:14px 32px;border:1px solid #3F5039;border-radius:6px;background:#3F5039;color:#FFFFFF !important;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;line-height:20px;letter-spacing:.2px"><span style="color:#FFFFFF;text-decoration:none">View your proposal&nbsp;&rarr;</span></a>
+      </td>
+    </tr>
+  </table>
 </td></tr>
 <tr><td style="background:#FAF7F1;padding:16px 28px;font-size:12px;color:#8A8276;line-height:1.5">
 Glass Garden Rooms Ltd · Unit 25, Centenary Business Centre, Hammond Close, Nuneaton, CV11 6RY<br>
