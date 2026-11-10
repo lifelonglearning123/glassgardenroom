@@ -43,6 +43,7 @@ export async function PUT(req: Request, { params }: Ctx) {
       leftReturn: str(b.spec.leftReturn, 300),
       rightReturn: str(b.spec.rightReturn, 300),
       front: str(b.spec.front, 300),
+      rear: str(b.spec.rear, 300),
       freestanding: Boolean(b.spec.freestanding),
       notes: str(b.spec.notes, 4000),
     };

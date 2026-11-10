@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {
   COLOURS,
   RANGES,
+  REAR_NOT_APPLICABLE,
   UPGRADE_PRESETS,
   gbp,
   quoteKeywords,
@@ -163,13 +164,28 @@ export default function QuoteEditor({
                 <datalist id="colours">{COLOURS.map((c) => <option key={c} value={c} />)}</datalist>
               </label>
               <label className="check inline">
-                <input type="checkbox" checked={q.spec.freestanding} onChange={(e) => setSpec({ freestanding: e.target.checked })} />
+                <input
+                  type="checkbox"
+                  checked={q.spec.freestanding}
+                  onChange={(e) =>
+                    setSpec({
+                      freestanding: e.target.checked,
+                      // First time it goes freestanding, start the rear from the range default.
+                      ...(e.target.checked && !q.spec.rear ? { rear: RANGES[q.spec.range].defaults.rear } : {}),
+                    })
+                  }
+                />
                 <span>Freestanding (not fixed to the house)</span>
               </label>
               <Field label="Roof" full value={q.spec.roof} onChange={(v) => setSpec({ roof: v })} />
               <Field label="Left return" full value={q.spec.leftReturn} onChange={(v) => setSpec({ leftReturn: v })} />
               <Field label="Right return" full value={q.spec.rightReturn} onChange={(v) => setSpec({ rightReturn: v })} />
               <Field label="Front" full value={q.spec.front} onChange={(v) => setSpec({ front: v })} />
+              {q.spec.freestanding ? (
+                <Field label="Rear" full value={q.spec.rear ?? ''} onChange={(v) => setSpec({ rear: v })} />
+              ) : (
+                <Field label="Rear" full value={REAR_NOT_APPLICABLE} onChange={() => undefined} disabled />
+              )}
               <label className="field full">
                 <span>Notes shown on the proposal (one per line)</span>
                 <textarea rows={4} value={q.spec.notes} onChange={(e) => setSpec({ notes: e.target.value })} />
@@ -246,6 +262,7 @@ function Field({
   full,
   placeholder,
   type = 'text',
+  disabled,
 }: {
   label: string;
   value: string;
@@ -253,11 +270,12 @@ function Field({
   full?: boolean;
   placeholder?: string;
   type?: string;
+  disabled?: boolean;
 }) {
   return (
     <label className={`field ${full ? 'full' : ''}`}>
       <span>{label}</span>
-      <input type={type} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+      <input type={type} value={value} placeholder={placeholder} disabled={disabled} onChange={(e) => onChange(e.target.value)} />
     </label>
   );
 }

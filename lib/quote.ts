@@ -23,6 +23,8 @@ export type Spec = {
   leftReturn: string;
   rightReturn: string;
   front: string;
+  /** Only used when freestanding; wall-mounted rooms have the house wall at the back. */
+  rear: string;
   freestanding: boolean;
   notes: string;
 };
@@ -107,6 +109,7 @@ export const RANGES: Record<RangeKey, {
       leftReturn: 'Glazed wedge frame with 10mm toughened clear glazed sliding doors',
       rightReturn: 'Glazed wedge frame with 10mm toughened clear glazed sliding doors',
       front: '10mm toughened clear glazed sliding doors',
+      rear: '10mm toughened clear glazed sliding doors',
       notes: COMMON_NOTES,
     },
   },
@@ -120,6 +123,7 @@ export const RANGES: Record<RangeKey, {
       leftReturn: 'Open',
       rightReturn: 'Open',
       front: 'Open',
+      rear: 'Open',
       notes: COMMON_NOTES,
     },
   },
@@ -133,10 +137,18 @@ export const RANGES: Record<RangeKey, {
       leftReturn: 'Open',
       rightReturn: 'Open',
       front: 'Open',
+      rear: 'Open',
       notes: COMMON_NOTES,
     },
   },
 };
+
+export const REAR_NOT_APPLICABLE = 'Not applicable (wall-mounted)';
+
+/** What the rear shows on the proposal: the chosen rear if freestanding, otherwise not applicable. */
+export function rearText(s: Pick<Spec, 'freestanding' | 'rear'>): string {
+  return s.freestanding ? s.rear ?? '' : REAR_NOT_APPLICABLE;
+}
 
 export function defaultSpec(range: RangeKey = 'gold'): Spec {
   return {
@@ -183,7 +195,7 @@ export function ukDate(d: Date | string): string {
 /** Words in the quote that should pull matching photos to the top. */
 export function quoteKeywords(q: Pick<Quote, 'spec' | 'pricing'>): string[] {
   const s = q.spec;
-  const text = [s.colour, s.leftReturn, s.rightReturn, s.front, s.notes, ...q.pricing.upgrades.map((u) => u.label)]
+  const text = [s.colour, s.leftReturn, s.rightReturn, s.front, s.freestanding ? s.rear : '', s.notes, ...q.pricing.upgrades.map((u) => u.label)]
     .join(' ')
     .toLowerCase();
   const k: string[] = [s.range, s.freestanding ? 'freestanding' : 'attached'];

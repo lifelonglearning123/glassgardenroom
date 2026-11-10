@@ -1,4 +1,4 @@
-import { RANGES, gbp, issuedAt, quoteRef, totals, ukDate, validUntil, type Photo, type Quote, type RangeKey } from '@/lib/quote';
+import { RANGES, gbp, issuedAt, quoteRef, rearText, totals, ukDate, validUntil, type Photo, type Quote, type RangeKey } from '@/lib/quote';
 import AcceptBox from './AcceptBox';
 
 const RANGE_IMAGE: Record<RangeKey, string> = {
@@ -47,6 +47,7 @@ export default function Proposal({ quote: q, photos }: { quote: Quote; photos: P
       ['Left return', q.spec.leftReturn],
       ['Right return', q.spec.rightReturn],
       ['Front', q.spec.front],
+      ['Rear', rearText(q.spec)],
     ] as [string, string][]
   ).filter(([, v]) => v);
 
