@@ -143,6 +143,8 @@ export const RANGES: Record<RangeKey, {
   },
 };
 
+export const FINANCE_TEXT = 'Finance options available – contact us for details.';
+
 export const REAR_NOT_APPLICABLE = 'Not applicable (wall-mounted)';
 
 /** What the rear shows on the proposal: the chosen rear if freestanding, otherwise not applicable. */

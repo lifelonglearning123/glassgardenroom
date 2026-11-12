@@ -7,6 +7,7 @@ import { listPhotos } from '@/lib/photos';
 import { currentSession } from '@/lib/users';
 import { isRealVisitor, recordOpen } from '@/lib/tracking';
 import { quoteRef } from '@/lib/quote';
+import QRCode from 'qrcode';
 import Proposal from '@/components/Proposal';
 import PrintButton from '@/components/PrintButton';
 import '../../quotes/globals.css';
@@ -34,9 +35,15 @@ export default async function ProposalPage({ params, searchParams }: Props) {
   const photos = q.photoIds.map((id) => all.find((p) => p.id === id)).filter(Boolean) as typeof all;
 
   // Every open by the client is counted (not Steve's own previews, not link-preview robots).
-  if (!session && isRealVisitor(await headers())) {
+  const h = await headers();
+  if (!session && isRealVisitor(h)) {
     await recordOpen(q);
   }
+
+  // The PDF can't hold a button, so it prints the accept link and a QR code for it.
+  const base = (process.env.APP_URL || `${h.get('x-forwarded-proto') ?? 'https'}://${h.get('host')}`).replace(/\/$/, '');
+  const acceptUrl = `${base}/proposal/${q.token}/accept`;
+  const acceptQr = await QRCode.toString(acceptUrl, { type: 'svg', margin: 0, color: { dark: '#181612', light: '#ffffff' } });
 
   return (
     <div className="proposal-page">
@@ -51,7 +58,7 @@ export default async function ProposalPage({ params, searchParams }: Props) {
         )}
         <PrintButton auto={print === '1'} />
       </div>
-      <Proposal quote={q} photos={photos} />
+      <Proposal quote={q} photos={photos} acceptUrl={acceptUrl} acceptQr={acceptQr} />
     </div>
   );
 }

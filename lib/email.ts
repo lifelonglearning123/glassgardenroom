@@ -3,6 +3,11 @@ import { gbp, quoteRef, totals, ukDate, validUntil, type Quote } from './quote';
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
+/** The one-click accept page that sits next to a proposal link. */
+export function acceptLink(proposalLink: string): string {
+  return `${proposalLink.replace(/\/$/, '')}/accept`;
+}
+
 export function defaultEmailMessage(q: Quote): string {
   const first = q.client.name.split(' ')[0] || 'there';
   return (
@@ -46,6 +51,14 @@ export function emailHtml(q: Quote, message: string, link: string, appUrl: strin
     <tr>
       <td align="center" bgcolor="#3F5039" style="background:#3F5039;border-radius:6px;mso-padding-alt:14px 32px">
         <a href="${link}" target="_blank" style="display:inline-block;padding:14px 32px;border:1px solid #3F5039;border-radius:6px;background:#3F5039;color:#FFFFFF !important;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;line-height:20px;letter-spacing:.2px"><span style="color:#FFFFFF;text-decoration:none">View your proposal&nbsp;&rarr;</span></a>
+      </td>
+    </tr>
+  </table>
+  <p style="margin:18px 0 8px;font-size:14px;color:#8A8276">Happy to go ahead?</p>
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto">
+    <tr>
+      <td align="center" bgcolor="#FFFFFF" style="background:#FFFFFF;border:2px solid #3F5039;border-radius:6px;mso-padding-alt:12px 30px">
+        <a href="${acceptLink(link)}" target="_blank" style="display:inline-block;padding:12px 30px;border-radius:6px;background:#FFFFFF;color:#3F5039 !important;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-height:20px"><span style="color:#3F5039;text-decoration:none">Accept your quote&nbsp;&#10003;</span></a>
       </td>
     </tr>
   </table>

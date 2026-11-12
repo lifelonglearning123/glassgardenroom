@@ -14,14 +14,17 @@ export default function AcceptBox({
   clientName: string;
 }) {
   const [done, setDone] = useState(Boolean(acceptedAt));
-  const [name, setName] = useState(clientName);
+  const [who, setWho] = useState(acceptedBy ?? '');
+  // When we already know the client's name, accepting is a single click.
+  const known = clientName.trim();
+  const [name, setName] = useState(known);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
 
   if (done) {
     return (
       <div className="accept done">
-        <strong>Proposal accepted{acceptedBy ? ` by ${acceptedBy}` : ''}.</strong> Thank you. We will be in touch shortly
+        <strong>Proposal accepted{who ? ` by ${who}` : ''}.</strong> Thank you. We will be in touch shortly
         to arrange your technical site survey.
       </div>
     );
@@ -37,6 +40,7 @@ export default function AcceptBox({
         body: JSON.stringify({ name }),
       });
       if (!res.ok) throw new Error();
+      setWho(name.trim());
       setDone(true);
     } catch {
       setError('Something went wrong. Please call us on 024 7510 2899.');
@@ -47,10 +51,12 @@ export default function AcceptBox({
 
   return (
     <div className="accept no-print">
-      <label>
-        <span>Your name</span>
-        <input value={name} onChange={(e) => setName(e.target.value)} />
-      </label>
+      {!known && (
+        <label>
+          <span>Your name</span>
+          <input value={name} onChange={(e) => setName(e.target.value)} />
+        </label>
+      )}
       <button className="btn primary block" onClick={accept} disabled={busy || !name.trim()}>
         {busy ? 'Sending…' : 'Accept this proposal'}
       </button>

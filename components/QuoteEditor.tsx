@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   COLOURS,
+  FINANCE_TEXT,
   RANGES,
   REAR_NOT_APPLICABLE,
   UPGRADE_PRESETS,
@@ -19,7 +20,7 @@ import {
   type RangeKey,
   type Spec,
 } from '@/lib/quote';
-import { defaultEmailMessage, defaultEmailSubject } from '@/lib/email';
+import { acceptLink, defaultEmailMessage, defaultEmailSubject } from '@/lib/email';
 import { deleteQuoteAction, duplicateQuoteAction, reviseQuoteAction } from '@/app/quotes/actions';
 
 type SaveState = 'saved' | 'saving' | 'unsaved' | 'error';
@@ -209,7 +210,7 @@ export default function QuoteEditor({
               {t.discount > 0 && (<><dt>{q.pricing.discountLabel || 'Discount'}</dt><dd>−{gbp(t.discount)}</dd></>)}
               <dt className="total">Total inc. VAT</dt><dd className="total">{gbp(t.total)}</dd>
             </dl>
-            <p className="muted small">Or {gbp(t.monthly12)} a month over 12 months at 0% APR.</p>
+            <p className="muted small">{FINANCE_TEXT}</p>
             <div className="form-grid tight">
               <Field label="Prepared by" value={q.preparedBy} onChange={(v) => setQ((x) => ({ ...x, preparedBy: v }))} />
               <label className="field">
@@ -632,7 +633,9 @@ function SendDialog({
   };
 
   const firstName = quote.client.name.split(' ')[0] || '';
-  const whatsappText = encodeURIComponent(`Hi ${firstName}, here is your Glass Garden Rooms proposal: ${link}`);
+  const whatsappText = encodeURIComponent(
+    `Hi ${firstName}, here is your Glass Garden Rooms proposal: ${link}\n\nHappy to go ahead? Accept your quote here: ${acceptLink(link)}`,
+  );
   const whatsappNumber = quote.client.phone.replace(/\D/g, '').replace(/^0/, '44');
 
   return (
@@ -654,6 +657,10 @@ function SendDialog({
               download the PDF and accept online.
             </p>
             <input readOnly value={link} onFocus={(e) => e.target.select()} />
+            <label className="field">
+              <span>Accept link: opens a page where the client accepts with one click</span>
+              <input readOnly value={acceptLink(link)} onFocus={(e) => e.target.select()} />
+            </label>
             {done === 'link' && (
               <p className="alert ok small">
                 {copied ? 'Link copied. ' : ''}The quote is marked as given to the client and opens are now tracked.

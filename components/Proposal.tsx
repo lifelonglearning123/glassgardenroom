@@ -1,16 +1,54 @@
-import { RANGES, gbp, issuedAt, quoteRef, rearText, totals, ukDate, validUntil, type Photo, type Quote, type RangeKey } from '@/lib/quote';
+import { FINANCE_TEXT, RANGES, gbp, issuedAt, quoteRef, rearText, totals, ukDate, validUntil, type Photo, type Quote, type RangeKey } from '@/lib/quote';
 import AcceptBox from './AcceptBox';
 
-const RANGE_IMAGE: Record<RangeKey, string> = {
-  bronze: '/library/bordeaux.jpg',
-  silver: '/library/stretton-giallo.jpg',
-  gold: '/library/hero-inside-view.jpg',
-};
 const COVER_FALLBACK: Record<RangeKey, string> = {
   bronze: '/library/bordeaux.jpg',
   silver: '/library/stretton-pigato.jpg',
   gold: '/library/toulouse.jpg',
 };
+
+/** The standard wording and photo for each range. Kept together so it can become editable later. */
+const RANGE_COPY: Record<RangeKey, {
+  image: string;
+  headline: string;
+  sub: string;
+  intro: string;
+  details: [string, string][];
+}> = {
+  bronze: {
+    image: '/library/bordeaux.jpg',
+    headline: 'Practical All-Weather Shelter',
+    sub: 'The polycarbonate and aluminium veranda',
+    intro: 'A robust, high-performance architectural canopy providing cost-effective weather protection.',
+    details: [
+      ['Specification', 'Structural-grade aluminium framework; impact-resistant multi-wall polycarbonate roof panels; integrated invisible guttering down the support posts.'],
+      ['Ideal for', 'Sheltering hot tubs, outdoor kitchens or patio dining areas.'],
+    ],
+  },
+  silver: {
+    image: '/library/stretton-giallo.jpg',
+    headline: 'Light-Filled Glass Roof Living',
+    sub: 'The glass roof aluminium veranda',
+    intro: 'Premium architectural aesthetics with an 8.8mm laminated glass canopy that softens rain noise and floods your home with daylight.',
+    details: [
+      ['Specification', 'Heavy-duty reinforced slimline aluminium frame; premium 8.8mm high-transparency laminated safety glass.'],
+      ['Available upgrades', 'Integrated rafter LED lighting and premium heating units.'],
+    ],
+  },
+  gold: {
+    image: '/library/hero-inside-view.jpg',
+    headline: 'Elite Architectural Luxury',
+    sub: 'The all-season glass garden room',
+    intro: 'A fully enclosed glass sanctuary designed to seal out cold draughts, crosswinds, snow and rain, extending your outdoor living from early spring to late autumn.',
+    details: [
+      ['Specification', 'Extra heavy-duty structural aluminium frame; 8.8mm high-transparency laminated safety glass roof; fully glazed sides and front with high-strength safety glass and ultra-smooth multi-track sliding doors, or aluminium walls.'],
+      ['Climate upgrades', 'High-efficiency infra-red heaters, integrated ambient LED lighting and premium air conditioning units are available as bespoke extras.'],
+      ['Ideal for', 'A modern garden lounge, home workspace, or evening entertaining and relaxing.'],
+    ],
+  },
+};
+
+const RANGE_ORDER: RangeKey[] = ['bronze', 'silver', 'gold'];
 
 function Footer({ page }: { page: number }) {
   return (
@@ -25,9 +63,22 @@ function Selected({ range, current }: { range: RangeKey; current: RangeKey }) {
   return range === current ? <span className="your-pick">Your selection</span> : null;
 }
 
-export default function Proposal({ quote: q, photos }: { quote: Quote; photos: Photo[] }) {
+export default function Proposal({
+  quote: q,
+  photos,
+  acceptUrl,
+  acceptQr,
+}: {
+  quote: Quote;
+  photos: Photo[];
+  /** Full web address of the one-click accept page, printed in the PDF. */
+  acceptUrl?: string;
+  /** QR code (SVG markup) for acceptUrl, printed in the PDF. */
+  acceptQr?: string;
+}) {
   const t = totals(q.pricing);
   const range = q.spec.range;
+  const chosen = RANGE_COPY[range];
   const cover = photos[0]?.url ?? COVER_FALLBACK[range];
   const gallery = photos.length > 2 ? photos.slice(1) : photos;
   const location = [q.client.address, q.client.postcode].filter(Boolean).join(', ');
@@ -51,6 +102,44 @@ export default function Proposal({ quote: q, photos }: { quote: Quote; photos: P
     ] as [string, string][]
   ).filter(([, v]) => v);
 
+  // Pricing and next steps share page 5; a long price list pushes next steps onto page 6.
+  const extraPriceLines = q.pricing.upgrades.filter((u) => u.label || u.amount).length + (t.discount > 0 ? 1 : 0);
+  const splitSteps = extraPriceLines > 3;
+  const nextSteps = (
+    <div className={`next-steps ${splitSteps ? 'own-page' : ''}`}>
+      <div>
+        <p className="eyebrow">Next steps</p>
+        <h2>Securing Your Commission</h2>
+        <ol className="steps">
+          <li><strong>Accept your quote.</strong> Accept online in one click, or contact us to lock in pricing.</li>
+          <li><strong>Technical site survey.</strong> An unhurried 45-minute site measurement and physical sample sign-off at your home.</li>
+          <li><strong>Precision manufacture &amp; build.</strong> A 2–10 week manufacturing lead time depending on range. Verandas typically install in 1–2 days; glass garden rooms in 3–6 days.</li>
+          <li><strong>Handover.</strong> A thorough clean and walkthrough of your project to ensure complete satisfaction.</li>
+        </ol>
+      </div>
+      <div className="cta">
+        <h3>Ready to move forward?</h3>
+        <p>If you are happy with this specification, accept your proposal and we will be in touch to book your technical survey.</p>
+        <AcceptBox token={q.token} acceptedAt={q.acceptedAt} acceptedBy={q.acceptedBy} clientName={q.client.name} />
+        {acceptUrl && !q.acceptedAt && (
+          <div className="print-accept print-only">
+            {acceptQr && <div className="qr" dangerouslySetInnerHTML={{ __html: acceptQr }} />}
+            <p>
+              <strong>Happy to go ahead?</strong> Scan the code with your phone camera to accept in one click,
+              or <a href={acceptUrl}>accept your quote online</a>.
+            </p>
+          </div>
+        )}
+        <ul className="contact">
+          <li><strong>Call or WhatsApp:</strong> 024 7510 2899 / 07398 224061</li>
+          <li><strong>Email:</strong> <a href="mailto:info@glassgardenrooms.net">info@glassgardenrooms.net</a></li>
+          <li><strong>Showroom:</strong> Unit 25, Centenary Business Centre, Hammond Close, Nuneaton, CV11 6RY (visits by appointment)</li>
+        </ul>
+        <p className="small">Prepared by {q.preparedBy}, Glass Garden Rooms Ltd</p>
+      </div>
+    </div>
+  );
+
   return (
     <div className="proposal">
       {/* 1. Cover */}
@@ -71,9 +160,9 @@ export default function Proposal({ quote: q, photos }: { quote: Quote; photos: P
         <Footer page={1} />
       </section>
 
-      {/* 2. Vision & trust */}
+      {/* 2. About us + the range they chose */}
       <section className="sheet">
-        <div className="two-col">
+        <div className="about">
           <div>
             <p className="eyebrow">About us</p>
             <h2>Bringing the Outdoors In</h2>
@@ -89,57 +178,45 @@ export default function Proposal({ quote: q, photos }: { quote: Quote; photos: P
               <li><strong>Transparent principles.</strong> Honest numbers, clear-cut packages, and no high-pressure sales tactics.</li>
             </ul>
           </div>
-          <div className="tall-image" style={{ backgroundImage: 'url("/library/stretton-lighting.jpg")' }} />
+          <div className="about-image" style={{ backgroundImage: 'url("/library/stretton-lighting.jpg")' }} />
+        </div>
+
+        <div className="feature">
+          <div className="feature-image" style={{ backgroundImage: `url("${chosen.image}")` }} />
+          <p className="eyebrow">Your selection</p>
+          <h2>{chosen.headline}</h2>
+          <h3>{RANGES[range].tier} Range: {chosen.sub}</h3>
+          <p>{chosen.intro}</p>
+          <ul className="ticks">
+            {chosen.details.map(([k, v]) => (
+              <li key={k}><strong>{k}.</strong> {v}</li>
+            ))}
+          </ul>
         </div>
         <Footer page={2} />
       </section>
 
-      {/* 3. Bronze & Silver */}
+      {/* 3. All three ranges */}
       <section className="sheet">
         <p className="eyebrow">Our ranges</p>
         <h2>Choose Your Ideal Project</h2>
-        <div className="range-card">
-          <div className="range-img" style={{ backgroundImage: `url("${RANGE_IMAGE.bronze}")` }} />
-          <div>
-            <h3>Bronze Range <Selected range="bronze" current={range} /></h3>
-            <p className="sub">The polycarbonate and aluminium veranda</p>
-            <p>A robust, high-performance architectural canopy providing cost-effective weather protection.</p>
-            <p className="small"><strong>Specification:</strong> structural-grade aluminium framework; impact-resistant multi-wall polycarbonate roof panels; integrated invisible guttering down the support posts.</p>
-            <p className="small"><strong>Ideal for:</strong> sheltering hot tubs, outdoor kitchens or patio dining areas.</p>
+        {RANGE_ORDER.map((r) => (
+          <div key={r} className={`range-card ${r === range ? 'is-chosen' : ''}`}>
+            <div className="range-img" style={{ backgroundImage: `url("${RANGE_COPY[r].image}")` }} />
+            <div>
+              <h3>{RANGES[r].tier} Range <Selected range={r} current={range} /></h3>
+              <p className="sub">{RANGE_COPY[r].sub}</p>
+              <p>{RANGE_COPY[r].intro}</p>
+              {RANGE_COPY[r].details.slice(0, 2).map(([k, v]) => (
+                <p key={k} className="small"><strong>{k}:</strong> {v}</p>
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="range-card">
-          <div className="range-img" style={{ backgroundImage: `url("${RANGE_IMAGE.silver}")` }} />
-          <div>
-            <h3>Silver Range <Selected range="silver" current={range} /></h3>
-            <p className="sub">The glass roof aluminium veranda</p>
-            <p>Premium architectural aesthetics with an 8.8mm laminated glass canopy that softens rain noise and floods your home with daylight.</p>
-            <p className="small"><strong>Specification:</strong> heavy-duty reinforced slimline aluminium frame; premium 8.8mm high-transparency laminated safety glass.</p>
-            <p className="small"><strong>Available upgrades:</strong> integrated rafter LED lighting and premium heating units.</p>
-          </div>
-        </div>
+        ))}
         <Footer page={3} />
       </section>
 
-      {/* 4. Gold */}
-      <section className="sheet">
-        <div className="wide-image" style={{ backgroundImage: `url("${RANGE_IMAGE.gold}")` }} />
-        <p className="eyebrow">The ultimate experience</p>
-        <h2>Elite Architectural Luxury</h2>
-        <h3>Gold Range: the all-season glass garden room <Selected range="gold" current={range} /></h3>
-        <p>
-          A fully enclosed glass sanctuary designed to seal out cold draughts, crosswinds, snow and rain, extending
-          your outdoor living from early spring to late autumn.
-        </p>
-        <ul className="ticks">
-          <li><strong>Specification.</strong> Extra heavy-duty structural aluminium frame; 8.8mm high-transparency laminated safety glass roof; fully glazed sides and front with high-strength safety glass and ultra-smooth multi-track sliding doors, or aluminium walls.</li>
-          <li><strong>Climate upgrades.</strong> High-efficiency infra-red heaters, integrated ambient LED lighting and premium air conditioning units are available as bespoke extras.</li>
-          <li><strong>Ideal for.</strong> A modern garden lounge, home workspace, or evening entertaining and relaxing.</li>
-        </ul>
-        <Footer page={4} />
-      </section>
-
-      {/* 5. Your project */}
+      {/* 4. Your project */}
       <section className="sheet">
         <p className="eyebrow">Designed for you</p>
         <h2>Your Project Specification</h2>
@@ -165,11 +242,11 @@ export default function Proposal({ quote: q, photos }: { quote: Quote; photos: P
             </div>
           </>
         )}
-        <Footer page={5} />
+        <Footer page={4} />
       </section>
 
-      {/* 6. Pricing */}
-      <section className="sheet">
+      {/* 5. Pricing + next steps. Grows onto a second printed page if a quote has many lines. */}
+      <section className="sheet grows">
         <p className="eyebrow">Your personalised quotation</p>
         <h2>Tailored Project Costings</h2>
         <table className="price-table">
@@ -195,42 +272,23 @@ export default function Proposal({ quote: q, photos }: { quote: Quote; photos: P
           </tbody>
         </table>
         <p className="finance">
-          <strong>Spread the cost.</strong> 0% APR finance is available on this proposal, from {gbp(t.monthly12)} a month
-          over 12 months, or spread it across 24 or 36 months. Finance is subject to status.
+          <strong>Spread the cost.</strong> {FINANCE_TEXT}
         </p>
         <p className="small muted">
           Terms: deposit on order, interim payment prior to delivery, balance on completion of installation. All prices include VAT.
         </p>
-        <Footer page={6} />
+
+        {!splitSteps && nextSteps}
+        <Footer page={5} />
       </section>
 
-      {/* 7. Next steps */}
-      <section className="sheet">
-        <div className="two-col">
-          <div>
-            <p className="eyebrow">Next steps</p>
-            <h2>Securing Your Commission</h2>
-            <ol className="steps">
-              <li><strong>Accept your quote.</strong> Review this proposal and accept it below, or contact us to lock in pricing.</li>
-              <li><strong>Technical site survey.</strong> An unhurried 45-minute site measurement and physical sample sign-off at your home.</li>
-              <li><strong>Precision manufacture &amp; build.</strong> A 2–10 week manufacturing lead time depending on range. Verandas typically install in 1–2 days; glass garden rooms in 3–6 days.</li>
-              <li><strong>Handover.</strong> A thorough clean and walkthrough of your project to ensure complete satisfaction.</li>
-            </ol>
-          </div>
-          <div className="cta">
-            <h3>Ready to move forward?</h3>
-            <p>If you are happy with this specification, accept your proposal and we will be in touch to book your technical survey.</p>
-            <AcceptBox token={q.token} acceptedAt={q.acceptedAt} acceptedBy={q.acceptedBy} clientName={q.client.name} />
-            <ul className="contact">
-              <li><strong>Call or WhatsApp:</strong> 024 7510 2899 / 07398 224061</li>
-              <li><strong>Email:</strong> <a href="mailto:info@glassgardenrooms.net">info@glassgardenrooms.net</a></li>
-              <li><strong>Showroom:</strong> Unit 25, Centenary Business Centre, Hammond Close, Nuneaton, CV11 6RY (visits by appointment)</li>
-            </ul>
-            <p className="small">Prepared by {q.preparedBy}, Glass Garden Rooms Ltd</p>
-          </div>
-        </div>
-        <Footer page={7} />
-      </section>
+      {/* 6. Next steps on their own page, only when the price list is long. */}
+      {splitSteps && (
+        <section className="sheet">
+          {nextSteps}
+          <Footer page={6} />
+        </section>
+      )}
     </div>
   );
 }

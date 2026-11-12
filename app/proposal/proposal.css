@@ -39,17 +39,27 @@
 .cover-meta dt { color: var(--ink-mute); }
 .cover-meta dd { margin: 0; font-weight: 600; }
 
-.two-col { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 10mm; height: 100%; }
-.tall-image { background: center / cover no-repeat; border-radius: 3mm; min-height: 200mm; }
-.wide-image { height: 105mm; margin: -18mm -18mm 9mm; background: center / cover no-repeat; }
+/* Page 2: about us beside a photo, then the range they chose. */
+.about { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 9mm; }
+.about h2 { margin-bottom: 4mm; }
+.about h3 { margin-top: 4mm; }
+.about .ticks li { margin-bottom: 2.5mm; }
+.about-image { background: center / cover no-repeat; border-radius: 3mm; min-height: 100mm; }
+.feature { margin-top: 7mm; padding-top: 6mm; border-top: 1px solid var(--line-soft); }
+.feature-image { height: 58mm; border-radius: 3mm; background: center / cover no-repeat; margin-bottom: 5mm; }
+.feature h2 { margin-bottom: 2mm; }
+.feature h3 { margin-top: 0; color: var(--brass); }
+.feature .ticks li { margin-bottom: 2mm; }
 .ticks { padding: 0; list-style: none; margin: 0; }
 .ticks li { position: relative; padding-left: 7mm; margin-bottom: 3.5mm; }
 .ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; width: 3.2mm; height: 3.2mm; border-radius: 50%; background: var(--moss); }
 
-.range-card { display: grid; grid-template-columns: 68mm 1fr; gap: 7mm; margin: 6mm 0 9mm; }
+.range-card { display: grid; grid-template-columns: 62mm 1fr; gap: 7mm; margin: 5mm 0 0; padding-bottom: 5mm; border-bottom: 1px solid var(--line-soft); }
+.range-card:last-of-type { border-bottom: 0; }
 .range-card h3 { margin-top: 0; }
-.range-card .sub { color: var(--brass); font-weight: 600; margin-bottom: 2.5mm; }
-.range-img { height: 92mm; border-radius: 3mm; background: center / cover no-repeat; }
+.range-card p { margin-bottom: 2mm; }
+.range-card .sub { color: var(--brass); font-weight: 600; margin-bottom: 2mm; }
+.range-img { height: 64mm; border-radius: 3mm; background: center / cover no-repeat; }
 
 .spec-table, .price-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
 .spec-table th, .spec-table td { text-align: left; padding: 2.4mm 3mm; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
@@ -65,25 +75,53 @@
 .gallery.n4 .gallery-img { height: 42mm; }
 
 .price-table th { text-align: left; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-mute); padding: 2.5mm 3mm; border-bottom: 1.5px solid var(--ink); }
-.price-table td { padding: 3mm; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+.price-table td { padding: 2.2mm 3mm; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
 .price-table td:nth-child(2) { color: var(--ink-soft); }
 .price-table .tint td { background: #f5f3ef; }
 .price-table .sum td { border-top: 1.5px solid var(--ink); }
 .price-table .discount td { color: var(--moss); }
-.price-table .grand td { background: var(--ink); color: #fff; font-weight: 700; font-size: 12pt; text-transform: uppercase; letter-spacing: 0.04em; padding: 4mm 3mm; }
-.finance { margin-top: 6mm !important; padding: 4mm 5mm; background: var(--bone-soft); border-left: 3px solid var(--brass); }
+.price-table .grand td { background: var(--ink); color: #fff; font-weight: 700; font-size: 12pt; text-transform: uppercase; letter-spacing: 0.04em; padding: 3.2mm 3mm; }
+.finance { margin-top: 4mm !important; padding: 3mm 5mm; background: var(--bone-soft); border-left: 3px solid var(--brass); }
 
-.steps { padding-left: 5mm; margin: 0; }
-.steps li { margin-bottom: 4mm; padding-left: 1mm; }
-.cta { background: var(--bone); border-radius: 3mm; padding: 8mm; align-self: start; }
-.cta h3 { margin-top: 0; font-size: 15pt; }
-.contact { list-style: none; padding: 0; margin: 6mm 0 4mm; font-size: 9pt; }
-.contact li { margin-bottom: 2mm; }
+/* Page 5: pricing, then next steps. It may run onto a second printed page for long quotes. */
+.sheet.grows { height: auto; min-height: 297mm; padding-bottom: 26mm; }
+.next-steps { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 8mm; margin-top: 5mm; padding-top: 5mm; border-top: 1px solid var(--line-soft); break-inside: avoid; }
+.next-steps h2 { font-size: 16pt; margin-bottom: 4mm; }
+.next-steps.own-page { margin-top: 0; padding-top: 0; border-top: 0; }
+.steps { padding-left: 5mm; margin: 0; font-size: 9.5pt; }
+.steps li { margin-bottom: 3mm; padding-left: 1mm; }
+.cta { background: var(--bone); border-radius: 3mm; padding: 5mm; align-self: start; font-size: 9.5pt; }
+.print-only { display: none; }
+.print-accept { align-items: center; gap: 4mm; background: #fff; border-radius: 2mm; padding: 3mm; margin-top: 3mm; font-size: 8.5pt; }
+.print-accept p { margin: 0 !important; }
+.print-accept a { color: var(--moss); font-weight: 700; }
+.qr { width: 22mm; height: 22mm; flex: none; }
+.qr svg { width: 100%; height: 100%; display: block; }
+.cta h3 { margin: 0 0 2mm; font-size: 13pt; }
+.cta > p { margin-bottom: 2mm; }
+.contact { list-style: none; padding: 0; margin: 3mm 0 2mm; font-size: 8.5pt; line-height: 1.45; }
+.contact li { margin-bottom: 1.2mm; }
 .accept { background: #fff; border-radius: 2mm; padding: 4mm; display: flex; flex-direction: column; gap: 3mm; font-size: 9.5pt; }
 .accept label { display: flex; flex-direction: column; gap: 1mm; font-weight: 600; font-size: 8.5pt; }
 .accept.done { border-left: 3px solid var(--moss); }
 .accept p { margin: 0 !important; }
 .error-text { color: var(--err); }
+
+/* Accept page: one card, one button. */
+.accept-page { display: flex; flex-direction: column; }
+.accept-card {
+  width: min(480px, calc(100% - 32px)); margin: 40px auto 0; background: #fff; border-radius: 10px;
+  padding: 32px 28px; box-shadow: 0 2px 18px rgba(0, 0, 0, 0.08);
+}
+.accept-logo { height: 34px; width: auto; display: block; margin-bottom: 20px; }
+.accept-card h1 { font-size: 1.6rem; margin: 0 0 4px; }
+.accept-card > p { margin: 0 0 16px; }
+.accept-summary { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 0 0 20px; padding: 14px 16px; background: var(--bone-soft); border-radius: 6px; font-size: 0.95rem; }
+.accept-summary dt { color: var(--ink-mute); }
+.accept-summary dd { margin: 0; }
+.accept-card .accept { padding: 0; font-size: 0.95rem; }
+.accept-card .accept .btn { font-size: 1.05rem; padding: 0.9em 1em; }
+.accept-card > p.small { margin: 18px 0 0; }
 
 /* Phones: let sheets flow instead of fixed A4 boxes. */
 @media screen and (max-width: 860px) {
@@ -96,13 +134,14 @@
   .cover-body { padding: 22px 18px 0; }
   .cover-meta { grid-template-columns: 1fr; }
   .cover-meta dd { margin-bottom: 8px; }
-  .two-col, .range-card { grid-template-columns: 1fr; }
-  .tall-image { min-height: 240px; }
+  .about, .range-card, .next-steps { grid-template-columns: 1fr; }
+  .about-image { min-height: 220px; }
+  .feature-image { height: 200px; }
   .range-img { height: 200px; }
-  .wide-image { height: 220px; margin: -22px -18px 20px; }
   .gallery.n3, .gallery.n4 { grid-template-columns: 1fr 1fr; }
   .gallery-img, .gallery.n4 .gallery-img { height: 130px; }
-  .price-table th:nth-child(2), .price-table tr:not(.grand) td:nth-child(2) { display: none; }
+  /* Collapse the middle column but keep it in the table, so prices stay right-aligned under the total. */
+  .price-table th:nth-child(2), .price-table tr:not(.grand) td:nth-child(2) { width: 0; padding: 0; font-size: 0; }
   .sheet-foot { left: 18px; right: 18px; bottom: 16px; }
   .proposal-toolbar { flex-wrap: wrap; }
 }
@@ -114,6 +153,8 @@
   .proposal-page { background: #fff; padding: 0; }
   .proposal { display: block; padding: 0; }
   .sheet { box-shadow: none; margin: 0; break-after: page; page-break-after: always; }
+  .print-only { display: flex; }
+  .price-table tr { break-inside: avoid; }
   .sheet:last-child { break-after: auto; page-break-after: auto; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
