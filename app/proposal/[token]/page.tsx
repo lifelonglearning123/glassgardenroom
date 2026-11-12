@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getQuoteByToken } from '@/lib/quotes';
 import { listPhotos } from '@/lib/photos';
+import { getTemplate } from '@/lib/template-store';
 import { currentSession } from '@/lib/users';
 import { isRealVisitor, recordOpen } from '@/lib/tracking';
 import { quoteRef } from '@/lib/quote';
@@ -58,7 +59,7 @@ export default async function ProposalPage({ params, searchParams }: Props) {
         )}
         <PrintButton auto={print === '1'} />
       </div>
-      <Proposal quote={q} photos={photos} acceptUrl={acceptUrl} acceptQr={acceptQr} />
+      <Proposal quote={q} photos={photos} acceptUrl={acceptUrl} acceptQr={acceptQr} template={await getTemplate()} />
     </div>
   );
 }

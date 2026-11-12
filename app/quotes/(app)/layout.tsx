@@ -18,6 +18,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <nav>
           <Link href="/quotes">All quotes</Link>
           <Link href="/quotes/photos">Photo library</Link>
+          <Link href="/quotes/template">Proposal wording</Link>
           <Link href="/quotes/settings">Settings</Link>
         </nav>
         <div className="topbar-right">

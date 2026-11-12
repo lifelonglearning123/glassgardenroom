@@ -1,5 +1,6 @@
-import { FINANCE_TEXT, RANGES, gbp, issuedAt, quoteRef, rearText, totals, ukDate, validUntil, type Photo, type Quote, type RangeKey } from '@/lib/quote';
+import { RANGES, gbp, issuedAt, quoteRef, rearText, totals, ukDate, validUntil, type Photo, type Quote, type RangeKey } from '@/lib/quote';
 import AcceptBox from './AcceptBox';
+import { DEFAULT_TEMPLATE, RANGE_ORDER, paragraphs, type ProposalTemplate } from '@/lib/template';
 
 const COVER_FALLBACK: Record<RangeKey, string> = {
   bronze: '/library/bordeaux.jpg',
@@ -7,48 +8,6 @@ const COVER_FALLBACK: Record<RangeKey, string> = {
   gold: '/library/toulouse.jpg',
 };
 
-/** The standard wording and photo for each range. Kept together so it can become editable later. */
-const RANGE_COPY: Record<RangeKey, {
-  image: string;
-  headline: string;
-  sub: string;
-  intro: string;
-  details: [string, string][];
-}> = {
-  bronze: {
-    image: '/library/bordeaux.jpg',
-    headline: 'Practical All-Weather Shelter',
-    sub: 'The polycarbonate and aluminium veranda',
-    intro: 'A robust, high-performance architectural canopy providing cost-effective weather protection.',
-    details: [
-      ['Specification', 'Structural-grade aluminium framework; impact-resistant multi-wall polycarbonate roof panels; integrated invisible guttering down the support posts.'],
-      ['Ideal for', 'Sheltering hot tubs, outdoor kitchens or patio dining areas.'],
-    ],
-  },
-  silver: {
-    image: '/library/stretton-giallo.jpg',
-    headline: 'Light-Filled Glass Roof Living',
-    sub: 'The glass roof aluminium veranda',
-    intro: 'Premium architectural aesthetics with an 8.8mm laminated glass canopy that softens rain noise and floods your home with daylight.',
-    details: [
-      ['Specification', 'Heavy-duty reinforced slimline aluminium frame; premium 8.8mm high-transparency laminated safety glass.'],
-      ['Available upgrades', 'Integrated rafter LED lighting and premium heating units.'],
-    ],
-  },
-  gold: {
-    image: '/library/hero-inside-view.jpg',
-    headline: 'Elite Architectural Luxury',
-    sub: 'The all-season glass garden room',
-    intro: 'A fully enclosed glass sanctuary designed to seal out cold draughts, crosswinds, snow and rain, extending your outdoor living from early spring to late autumn.',
-    details: [
-      ['Specification', 'Extra heavy-duty structural aluminium frame; 8.8mm high-transparency laminated safety glass roof; fully glazed sides and front with high-strength safety glass and ultra-smooth multi-track sliding doors, or aluminium walls.'],
-      ['Climate upgrades', 'High-efficiency infra-red heaters, integrated ambient LED lighting and premium air conditioning units are available as bespoke extras.'],
-      ['Ideal for', 'A modern garden lounge, home workspace, or evening entertaining and relaxing.'],
-    ],
-  },
-};
-
-const RANGE_ORDER: RangeKey[] = ['bronze', 'silver', 'gold'];
 
 function Footer({ page }: { page: number }) {
   return (
@@ -63,14 +22,29 @@ function Selected({ range, current }: { range: RangeKey; current: RangeKey }) {
   return range === current ? <span className="your-pick">Your selection</span> : null;
 }
 
+function PointList({ points }: { points: { title: string; text: string }[] }) {
+  const shown = points.filter((p) => p.title || p.text);
+  if (!shown.length) return null;
+  return (
+    <ul className="ticks">
+      {shown.map((p, i) => (
+        <li key={i}>{p.title && <strong>{p.title}. </strong>}{p.text}</li>
+      ))}
+    </ul>
+  );
+}
+
 export default function Proposal({
   quote: q,
   photos,
   acceptUrl,
   acceptQr,
+  template: tpl = DEFAULT_TEMPLATE,
 }: {
   quote: Quote;
   photos: Photo[];
+  /** Standard wording and photos; edited on the Proposal wording page. */
+  template?: ProposalTemplate;
   /** Full web address of the one-click accept page, printed in the PDF. */
   acceptUrl?: string;
   /** QR code (SVG markup) for acceptUrl, printed in the PDF. */
@@ -78,7 +52,7 @@ export default function Proposal({
 }) {
   const t = totals(q.pricing);
   const range = q.spec.range;
-  const chosen = RANGE_COPY[range];
+  const chosen = tpl.ranges[range];
   const cover = photos[0]?.url ?? COVER_FALLBACK[range];
   const gallery = photos.length > 2 ? photos.slice(1) : photos;
   const location = [q.client.address, q.client.postcode].filter(Boolean).join(', ');
@@ -109,17 +83,16 @@ export default function Proposal({
     <div className={`next-steps ${splitSteps ? 'own-page' : ''}`}>
       <div>
         <p className="eyebrow">Next steps</p>
-        <h2>Securing Your Commission</h2>
+        <h2>{tpl.stepsHeading}</h2>
         <ol className="steps">
-          <li><strong>Accept your quote.</strong> Accept online in one click, or contact us to lock in pricing.</li>
-          <li><strong>Technical site survey.</strong> An unhurried 45-minute site measurement and physical sample sign-off at your home.</li>
-          <li><strong>Precision manufacture &amp; build.</strong> A 2–10 week manufacturing lead time depending on range. Verandas typically install in 1–2 days; glass garden rooms in 3–6 days.</li>
-          <li><strong>Handover.</strong> A thorough clean and walkthrough of your project to ensure complete satisfaction.</li>
+          {tpl.steps.filter((st) => st.title || st.text).map((st, i) => (
+            <li key={i}>{st.title && <strong>{st.title}. </strong>}{st.text}</li>
+          ))}
         </ol>
       </div>
       <div className="cta">
-        <h3>Ready to move forward?</h3>
-        <p>If you are happy with this specification, accept your proposal and we will be in touch to book your technical survey.</p>
+        <h3>{tpl.ctaHeading}</h3>
+        <p>{tpl.ctaText}</p>
         <AcceptBox token={q.token} acceptedAt={q.acceptedAt} acceptedBy={q.acceptedBy} clientName={q.client.name} />
         {acceptUrl && !q.acceptedAt && (
           <div className="print-accept print-only">
@@ -147,8 +120,8 @@ export default function Proposal({
         <div className="cover-image" style={{ backgroundImage: `url("${cover}")` }} />
         <div className="cover-body">
           <img src="/Brand/glassgardenroom.co-logo.svg" alt="Glass Garden Rooms" className="logo" />
-          <h1>A Bespoke Space for Your Home</h1>
-          <p className="kicker">Custom Outdoor Living Proposal</p>
+          <h1>{tpl.coverTitle}</h1>
+          <p className="kicker">{tpl.coverKicker}</p>
           <dl className="cover-meta">
             <dt>Prepared exclusively for</dt><dd>{q.client.name || '—'}</dd>
             {location && (<><dt>Project location</dt><dd>{location}</dd></>)}
@@ -165,20 +138,12 @@ export default function Proposal({
         <div className="about">
           <div>
             <p className="eyebrow">About us</p>
-            <h2>Bringing the Outdoors In</h2>
-            <p>
-              Thank you for inviting <strong>Glass Garden Rooms Ltd</strong> to design your outdoor living solution.
-              From our Nuneaton base, our family-run team is dedicated to supplying premium architectural aluminium
-              structures across the Midlands and beyond.
-            </p>
-            <h3>Built to last decades, not seasons</h3>
-            <ul className="ticks">
-              <li><strong>Engineered excellence.</strong> Constructed using ultra-durable 6063-T6 structural aluminium.</li>
-              <li><strong>Up to 15-year guarantee.</strong> Peace of mind with a comprehensive structural warranty on all chosen ranges.</li>
-              <li><strong>Transparent principles.</strong> Honest numbers, clear-cut packages, and no high-pressure sales tactics.</li>
-            </ul>
+            <h2>{tpl.aboutHeading}</h2>
+            {paragraphs(tpl.aboutBody).map((para, i) => <p key={i}>{para}</p>)}
+            {tpl.aboutSubheading && <h3>{tpl.aboutSubheading}</h3>}
+            <PointList points={tpl.aboutPoints} />
           </div>
-          <div className="about-image" style={{ backgroundImage: 'url("/library/stretton-lighting.jpg")' }} />
+          <div className="about-image" style={{ backgroundImage: `url("${tpl.aboutImage}")` }} />
         </div>
 
         <div className="feature">
@@ -187,11 +152,7 @@ export default function Proposal({
           <h2>{chosen.headline}</h2>
           <h3>{RANGES[range].tier} Range: {chosen.sub}</h3>
           <p>{chosen.intro}</p>
-          <ul className="ticks">
-            {chosen.details.map(([k, v]) => (
-              <li key={k}><strong>{k}.</strong> {v}</li>
-            ))}
-          </ul>
+          <PointList points={chosen.details} />
         </div>
         <Footer page={2} />
       </section>
@@ -202,13 +163,13 @@ export default function Proposal({
         <h2>Choose Your Ideal Project</h2>
         {RANGE_ORDER.map((r) => (
           <div key={r} className={`range-card ${r === range ? 'is-chosen' : ''}`}>
-            <div className="range-img" style={{ backgroundImage: `url("${RANGE_COPY[r].image}")` }} />
+            <div className="range-img" style={{ backgroundImage: `url("${tpl.ranges[r].image}")` }} />
             <div>
               <h3>{RANGES[r].tier} Range <Selected range={r} current={range} /></h3>
-              <p className="sub">{RANGE_COPY[r].sub}</p>
-              <p>{RANGE_COPY[r].intro}</p>
-              {RANGE_COPY[r].details.slice(0, 2).map(([k, v]) => (
-                <p key={k} className="small"><strong>{k}:</strong> {v}</p>
+              <p className="sub">{tpl.ranges[r].sub}</p>
+              <p>{tpl.ranges[r].intro}</p>
+              {tpl.ranges[r].details.filter((d) => d.title || d.text).slice(0, 2).map((d, i) => (
+                <p key={i} className="small">{d.title && <strong>{d.title}: </strong>}{d.text}</p>
               ))}
             </div>
           </div>
@@ -248,7 +209,7 @@ export default function Proposal({
       {/* 5. Pricing + next steps. Grows onto a second printed page if a quote has many lines. */}
       <section className="sheet grows">
         <p className="eyebrow">Your personalised quotation</p>
-        <h2>Tailored Project Costings</h2>
+        <h2>{tpl.pricingHeading}</h2>
         <table className="price-table">
           <thead>
             <tr><th>Selected package options</th><th>Specification</th><th className="num">Investment</th></tr>
@@ -272,10 +233,10 @@ export default function Proposal({
           </tbody>
         </table>
         <p className="finance">
-          <strong>Spread the cost.</strong> {FINANCE_TEXT}
+          <strong>Spread the cost.</strong> {tpl.financeText}
         </p>
         <p className="small muted">
-          Terms: deposit on order, interim payment prior to delivery, balance on completion of installation. All prices include VAT.
+          {tpl.terms}
         </p>
 
         {!splitSteps && nextSteps}

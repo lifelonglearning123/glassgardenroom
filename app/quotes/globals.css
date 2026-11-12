@@ -209,6 +209,25 @@ textarea { resize: vertical; }
 .modal h2 { margin: 0; }
 .modal-actions { display: flex; gap: 0.6rem; }
 
+/* ---------- Proposal wording ---------- */
+.template-editor { max-width: 900px; }
+.template-editor .card h2 { margin-top: 0; }
+.points-editor, .photo-picker { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.points-label { font-size: 0.78rem; font-weight: 600; color: var(--ink-soft); }
+.points-editor > .btn { align-self: flex-start; }
+.point-row { display: grid; grid-template-columns: 1.4rem 13rem 1fr auto; gap: 0.5rem; align-items: start; }
+.point-num { padding-top: 0.6em; color: var(--ink-mute); font-weight: 600; text-align: right; }
+.point-actions { display: flex; gap: 0.25rem; }
+.photo-picker-current { display: flex; gap: 1rem; align-items: flex-start; }
+.photo-picker-current img { width: 180px; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 8px; flex: none; }
+.photo-picker-current p { margin: 0.5rem 0 0; }
+.template-foot { margin-bottom: 2rem; flex-wrap: wrap; gap: 0.6rem; }
+@media (max-width: 700px) {
+  .point-row { grid-template-columns: 1.2rem 1fr; }
+  .point-row .point-text, .point-row .point-actions { grid-column: 2; }
+  .photo-picker-current { flex-direction: column; }
+}
+
 /* ---------- Photo library ---------- */
 .upload-btn { margin-top: 0.4rem; }
 .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }

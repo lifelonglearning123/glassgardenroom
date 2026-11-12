@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   COLOURS,
-  FINANCE_TEXT,
   RANGES,
   REAR_NOT_APPLICABLE,
   UPGRADE_PRESETS,
@@ -40,10 +39,13 @@ export default function QuoteEditor({
   initial,
   photos,
   crmEnabled,
+  financeText,
 }: {
   initial: Quote;
   photos: Photo[];
   crmEnabled: boolean;
+  /** The finance line from the proposal template, shown under the total. */
+  financeText: string;
 }) {
   const [q, setQ] = useState<Quote>(initial);
   const [saveState, setSaveState] = useState<SaveState>('saved');
@@ -210,7 +212,7 @@ export default function QuoteEditor({
               {t.discount > 0 && (<><dt>{q.pricing.discountLabel || 'Discount'}</dt><dd>−{gbp(t.discount)}</dd></>)}
               <dt className="total">Total inc. VAT</dt><dd className="total">{gbp(t.total)}</dd>
             </dl>
-            <p className="muted small">{FINANCE_TEXT}</p>
+            <p className="muted small">{financeText}</p>
             <div className="form-grid tight">
               <Field label="Prepared by" value={q.preparedBy} onChange={(v) => setQ((x) => ({ ...x, preparedBy: v }))} />
               <label className="field">
