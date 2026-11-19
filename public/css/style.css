@@ -1401,6 +1401,10 @@ p { max-width: 65ch; }
 .mosaic .m4 { grid-column: span 4; grid-row: span 2; }
 .mosaic .m5 { grid-column: span 4; grid-row: span 2; }
 .mosaic .m6 { grid-column: span 4; grid-row: span 2; }
+.mosaic .m7 { grid-column: span 8; grid-row: span 2; }
+.mosaic .m8 { grid-column: span 4; grid-row: span 2; }
+.mosaic .m9 { grid-column: span 4; grid-row: span 2; }
+.mosaic .m10 { grid-column: span 8; grid-row: span 2; }
 .mosaic figcaption {
   position: absolute;
   bottom: 0.75rem; left: 0.75rem;
@@ -1420,6 +1424,10 @@ p { max-width: 65ch; }
   .mosaic .m4 { grid-column: span 3; }
   .mosaic .m5 { grid-column: span 3; }
   .mosaic .m6 { grid-column: span 6; grid-row: span 2; }
+  .mosaic .m7 { grid-column: span 6; grid-row: span 2; }
+  .mosaic .m8 { grid-column: span 3; }
+  .mosaic .m9 { grid-column: span 3; }
+  .mosaic .m10 { grid-column: span 6; grid-row: span 2; }
 }
 
 /* ---------- Stat / counter strip ---------- */
