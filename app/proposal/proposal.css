@@ -123,6 +123,21 @@
 .accept-card .accept .btn { font-size: 1.05rem; padding: 0.9em 1em; }
 .accept-card > p.small { margin: 18px 0 0; }
 
+/* ===== Branded cover + accents (Nov 2026) — additive styling ===== */
+.sheet.cover { padding: 0; display: flex; flex-direction: column; }
+.cover-image { height: 52%; }
+.cover-body { flex: 1; position: relative; background: var(--ink); color: var(--bone); padding: 12mm 18mm 0; }
+.cover-body::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2.6mm; background: var(--brass); }
+.cover-body .logo { filter: brightness(0) invert(1); opacity: 0.96; }
+.sheet.cover h1 { color: #fff; }
+.sheet.cover .kicker { color: var(--brass) !important; }
+.sheet.cover .cover-meta { border-top-color: rgba(244, 239, 230, 0.22); }
+.sheet.cover .cover-meta dt { color: rgba(244, 239, 230, 0.55); }
+.sheet.cover .cover-meta dd { color: #fff; }
+.sheet:not(.cover)::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2.6mm; background: var(--brass); }
+.about > div > h2, .feature h2, .sheet > h2 { position: relative; padding-bottom: 2.6mm; }
+.about > div > h2::after, .feature h2::after, .sheet > h2::after { content: ''; position: absolute; left: 0; bottom: 0; width: 15mm; height: 0.8mm; background: var(--brass); }
+
 /* Phones: let sheets flow instead of fixed A4 boxes. */
 @media screen and (max-width: 860px) {
   .proposal { gap: 12px; padding: 12px 0; }
