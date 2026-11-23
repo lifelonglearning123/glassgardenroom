@@ -128,7 +128,7 @@
 .cover-image { height: 52%; }
 .cover-body { flex: 1; position: relative; background: var(--ink); color: var(--bone); padding: 12mm 18mm 0; }
 .cover-body::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2.6mm; background: var(--brass); }
-.cover-body .logo { filter: brightness(0) invert(1); opacity: 0.96; }
+.cover-body .logo { filter: none; height: 13mm; background: var(--bone); padding: 3mm 4.5mm; border-radius: 2.4mm; margin-bottom: 9mm; box-shadow: 0 1px 10px rgba(0, 0, 0, 0.25); }
 .sheet.cover h1 { color: #fff; }
 .sheet.cover .kicker { color: var(--brass) !important; }
 .sheet.cover .cover-meta { border-top-color: rgba(244, 239, 230, 0.22); }
